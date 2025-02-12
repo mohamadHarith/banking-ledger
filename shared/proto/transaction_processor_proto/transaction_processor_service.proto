@@ -1,0 +1,34 @@
+option go_package = "github.com/mohamadHarith/baking-ledger/shared/proto/transaction_processor_proto";
+
+
+service TransactionProcessorService {
+  rpc Withdraw (WithdrawRequest) returns (WithdrawResponse) {}
+  rpc Deposit (DepositRequest) returns (DepositResponse) {}
+  rpc Transfer (TransferRequest) returns (TransferResponse) {}
+}
+
+message WithdrawRequest{
+
+}
+
+message WithdrawResponse{
+
+}
+
+message DepositRequest{
+  required uint32 amount = 1;
+  required string userId = 2;
+  required string accountId = 3;
+}
+
+message DepositResponse{
+
+}
+
+message TransferRequest{
+
+}
+
+message TransferResponse{
+    
+}
