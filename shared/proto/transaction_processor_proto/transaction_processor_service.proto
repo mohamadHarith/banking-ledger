@@ -2,9 +2,19 @@ option go_package = "github.com/mohamadHarith/baking-ledger/shared/proto/transac
 
 
 service TransactionProcessorService {
+  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {}
   rpc Withdraw (WithdrawRequest) returns (WithdrawResponse) {}
   rpc Deposit (DepositRequest) returns (DepositResponse) {}
   rpc Transfer (TransferRequest) returns (TransferResponse) {}
+}
+
+message CreateAccountRequest {
+  required string userId = 1;
+  required uint32 initialBalance = 2;
+}
+
+message CreateAccountResponse{
+  required string accountId = 1;
 }
 
 message WithdrawRequest{

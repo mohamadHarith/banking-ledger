@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net"
-	"time"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/handler"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/mq"
@@ -27,14 +26,14 @@ func main() {
 
 	repo := repository.New()
 	mq := mq.New()
-	mq.PublishAccountBalance(123)
-	time.Sleep(time.Second * 2)
-	mq.PublishAccountBalance(124)
-	time.Sleep(time.Second * 2)
+	// mq.PublishAccountBalance(123)
+	// time.Sleep(time.Second * 2)
+	// mq.PublishAccountBalance(124)
+	// time.Sleep(time.Second * 2)
 
-	mq.PublishAccountBalance(125)
+	// mq.PublishAccountBalance(125)
 
-	h := handler.New(repo)
+	h := handler.New(repo, mq)
 
 	srv := grpc.NewServer()
 	pb.RegisterTransactionProcessorServiceServer(srv, h)

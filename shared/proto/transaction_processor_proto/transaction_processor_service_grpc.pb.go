@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v5.29.2
-// source: transaction_processor_proto/transaction_processor_service.proto
+// source: shared/proto/transaction_processor_proto/transaction_processor_service.proto
 
 package transaction_processor_proto
 
@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TransactionProcessorServiceClient interface {
+	CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
 	Withdraw(ctx context.Context, in *WithdrawRequest, opts ...grpc.CallOption) (*WithdrawResponse, error)
 	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
 	Transfer(ctx context.Context, in *TransferRequest, opts ...grpc.CallOption) (*TransferResponse, error)
@@ -33,6 +34,15 @@ type transactionProcessorServiceClient struct {
 
 func NewTransactionProcessorServiceClient(cc grpc.ClientConnInterface) TransactionProcessorServiceClient {
 	return &transactionProcessorServiceClient{cc}
+}
+
+func (c *transactionProcessorServiceClient) CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error) {
+	out := new(CreateAccountResponse)
+	err := c.cc.Invoke(ctx, "/TransactionProcessorService/CreateAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *transactionProcessorServiceClient) Withdraw(ctx context.Context, in *WithdrawRequest, opts ...grpc.CallOption) (*WithdrawResponse, error) {
@@ -66,6 +76,7 @@ func (c *transactionProcessorServiceClient) Transfer(ctx context.Context, in *Tr
 // All implementations must embed UnimplementedTransactionProcessorServiceServer
 // for forward compatibility
 type TransactionProcessorServiceServer interface {
+	CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
 	Withdraw(context.Context, *WithdrawRequest) (*WithdrawResponse, error)
 	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
 	Transfer(context.Context, *TransferRequest) (*TransferResponse, error)
@@ -76,6 +87,9 @@ type TransactionProcessorServiceServer interface {
 type UnimplementedTransactionProcessorServiceServer struct {
 }
 
+func (UnimplementedTransactionProcessorServiceServer) CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
+}
 func (UnimplementedTransactionProcessorServiceServer) Withdraw(context.Context, *WithdrawRequest) (*WithdrawResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Withdraw not implemented")
 }
@@ -97,6 +111,24 @@ type UnsafeTransactionProcessorServiceServer interface {
 
 func RegisterTransactionProcessorServiceServer(s grpc.ServiceRegistrar, srv TransactionProcessorServiceServer) {
 	s.RegisterService(&TransactionProcessorService_ServiceDesc, srv)
+}
+
+func _TransactionProcessorService_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionProcessorServiceServer).CreateAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/TransactionProcessorService/CreateAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionProcessorServiceServer).CreateAccount(ctx, req.(*CreateAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _TransactionProcessorService_Withdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -161,6 +193,10 @@ var TransactionProcessorService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TransactionProcessorServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "CreateAccount",
+			Handler:    _TransactionProcessorService_CreateAccount_Handler,
+		},
+		{
 			MethodName: "Withdraw",
 			Handler:    _TransactionProcessorService_Withdraw_Handler,
 		},
@@ -174,5 +210,5 @@ var TransactionProcessorService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "transaction_processor_proto/transaction_processor_service.proto",
+	Metadata: "shared/proto/transaction_processor_proto/transaction_processor_service.proto",
 }

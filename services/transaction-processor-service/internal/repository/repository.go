@@ -15,7 +15,7 @@ type Repository struct {
 func New() *Repository {
 	cfg := config.GetConf()
 
-	dsn := fmt.Sprintf("%v:%v@tcp(localhost:3306)/%v", cfg.MySql.User, cfg.MySql.Password, cfg.MySql.Database)
+	dsn := fmt.Sprintf("%v:%v@tcp(localhost:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, cfg.MySql.Database)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
@@ -32,30 +32,38 @@ func New() *Repository {
 }
 
 func (r *Repository) migrateTables() error {
-	// query := `
-	// CREATE TABLE IF NOT EXISTS accounts (
-	// 	id CHAR(36) PRIMARY KEY NOT NULL,
-	// 	user_id CHAR(36) NOT NULL,
-	// 	balance BIGINT UNSIGNED NOT NULL DEFAULT 0, -- stored in cents
-	// 	currency VARCHAR(10) DEFAULT 'USD',
-	// 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	// 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-	// );
+	query := `
+	CREATE TABLE IF NOT EXISTS users (
+		id CHAR(36) PRIMARY KEY DEFAULT (uuid()),
+		name VARCHAR(255) NOT NULL DEFAULT '',
+		password VARCHAR(255) NOT NULL DEFAULT '',
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	);
 
-	// CREATE TABLE IF NOT EXISTS transactions (
-	// 	id CHAR(36) PRIMARY KEY NOT NULL,
-	// 	account_id CHAR(36) NOT NULL,
-	// 	type ENUM('DEPOSIT', 'WITHDRAWAL', 'TRANSFER') NOT NULL,
-	// 	amount BIGINT NOT NULL, -- Stored in cents, withdrawals are negative values
-	// 	reference_id CHAR(36) NULL,
-	// 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	// 	FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
-	// );
-	// `
+	CREATE TABLE IF NOT EXISTS accounts (
+		id CHAR(36) PRIMARY KEY DEFAULT (uuid()),
+		user_id CHAR(36) NOT NULL,
+		balance BIGINT UNSIGNED NOT NULL DEFAULT 0, -- stored in cents
+		currency VARCHAR(10) DEFAULT 'MYR',
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+	);
 
-	// query := ``
+	CREATE TABLE IF NOT EXISTS transactions (
+		id CHAR(36)PRIMARY KEY DEFAULT (uuid()),
+		account_id CHAR(36) NOT NULL,
+		type ENUM('DEPOSIT', 'WITHDRAWAL', 'TRANSFER') NOT NULL,
+		amount BIGINT NOT NULL, -- Stored in cents, withdrawals are negative values
+		reference_id CHAR(36) NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+	);
+	`
 
-	// _, err := r.db.Exec(query)
+	_, err := r.db.Exec(query)
 
-	return nil
+	return err
 }

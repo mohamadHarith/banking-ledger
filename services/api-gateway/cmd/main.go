@@ -34,6 +34,14 @@ func main() {
 	}()
 
 	mux := http.NewServeMux()
+
+	mux.Handle("/account", nil)
+	// mux.Handle("/login", nil)
+	mux.Handle("/deposit", nil)
+	mux.Handle("/withdraw", nil)
+	mux.Handle("/transfer", nil)
+	mux.Handle("/balance", nil)
+
 	log.Println("[api-gateway] started on port [:5002]")
 	http.ListenAndServe(":5002", mux)
 }

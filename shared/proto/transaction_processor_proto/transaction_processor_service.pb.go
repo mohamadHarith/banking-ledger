@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.0
 // 	protoc        v5.29.2
-// source: transaction_processor_proto/transaction_processor_service.proto
+// source: shared/proto/transaction_processor_proto/transaction_processor_service.proto
 
 package transaction_processor_proto
 
@@ -20,6 +20,102 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type CreateAccountRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	UserId         *string                `protobuf:"bytes,1,req,name=userId" json:"userId,omitempty"`
+	InitialBalance *uint32                `protobuf:"varint,2,req,name=initialBalance" json:"initialBalance,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CreateAccountRequest) Reset() {
+	*x = CreateAccountRequest{}
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateAccountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateAccountRequest) ProtoMessage() {}
+
+func (x *CreateAccountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateAccountRequest.ProtoReflect.Descriptor instead.
+func (*CreateAccountRequest) Descriptor() ([]byte, []int) {
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *CreateAccountRequest) GetUserId() string {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
+	}
+	return ""
+}
+
+func (x *CreateAccountRequest) GetInitialBalance() uint32 {
+	if x != nil && x.InitialBalance != nil {
+		return *x.InitialBalance
+	}
+	return 0
+}
+
+type CreateAccountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccountId     *string                `protobuf:"bytes,1,req,name=accountId" json:"accountId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateAccountResponse) Reset() {
+	*x = CreateAccountResponse{}
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateAccountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateAccountResponse) ProtoMessage() {}
+
+func (x *CreateAccountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateAccountResponse.ProtoReflect.Descriptor instead.
+func (*CreateAccountResponse) Descriptor() ([]byte, []int) {
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateAccountResponse) GetAccountId() string {
+	if x != nil && x.AccountId != nil {
+		return *x.AccountId
+	}
+	return ""
+}
+
 type WithdrawRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -28,7 +124,7 @@ type WithdrawRequest struct {
 
 func (x *WithdrawRequest) Reset() {
 	*x = WithdrawRequest{}
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[0]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -40,7 +136,7 @@ func (x *WithdrawRequest) String() string {
 func (*WithdrawRequest) ProtoMessage() {}
 
 func (x *WithdrawRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[0]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -53,7 +149,7 @@ func (x *WithdrawRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WithdrawRequest.ProtoReflect.Descriptor instead.
 func (*WithdrawRequest) Descriptor() ([]byte, []int) {
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{0}
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{2}
 }
 
 type WithdrawResponse struct {
@@ -64,7 +160,7 @@ type WithdrawResponse struct {
 
 func (x *WithdrawResponse) Reset() {
 	*x = WithdrawResponse{}
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[1]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -76,7 +172,7 @@ func (x *WithdrawResponse) String() string {
 func (*WithdrawResponse) ProtoMessage() {}
 
 func (x *WithdrawResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[1]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -89,7 +185,7 @@ func (x *WithdrawResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WithdrawResponse.ProtoReflect.Descriptor instead.
 func (*WithdrawResponse) Descriptor() ([]byte, []int) {
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{1}
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{3}
 }
 
 type DepositRequest struct {
@@ -103,7 +199,7 @@ type DepositRequest struct {
 
 func (x *DepositRequest) Reset() {
 	*x = DepositRequest{}
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[2]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -115,7 +211,7 @@ func (x *DepositRequest) String() string {
 func (*DepositRequest) ProtoMessage() {}
 
 func (x *DepositRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[2]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -128,7 +224,7 @@ func (x *DepositRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DepositRequest.ProtoReflect.Descriptor instead.
 func (*DepositRequest) Descriptor() ([]byte, []int) {
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{2}
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DepositRequest) GetAmount() uint32 {
@@ -160,7 +256,7 @@ type DepositResponse struct {
 
 func (x *DepositResponse) Reset() {
 	*x = DepositResponse{}
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[3]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -172,7 +268,7 @@ func (x *DepositResponse) String() string {
 func (*DepositResponse) ProtoMessage() {}
 
 func (x *DepositResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[3]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -185,7 +281,7 @@ func (x *DepositResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DepositResponse.ProtoReflect.Descriptor instead.
 func (*DepositResponse) Descriptor() ([]byte, []int) {
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{3}
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{5}
 }
 
 type TransferRequest struct {
@@ -196,7 +292,7 @@ type TransferRequest struct {
 
 func (x *TransferRequest) Reset() {
 	*x = TransferRequest{}
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[4]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -208,7 +304,7 @@ func (x *TransferRequest) String() string {
 func (*TransferRequest) ProtoMessage() {}
 
 func (x *TransferRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[4]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -221,7 +317,7 @@ func (x *TransferRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferRequest.ProtoReflect.Descriptor instead.
 func (*TransferRequest) Descriptor() ([]byte, []int) {
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{4}
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{6}
 }
 
 type TransferResponse struct {
@@ -232,7 +328,7 @@ type TransferResponse struct {
 
 func (x *TransferResponse) Reset() {
 	*x = TransferResponse{}
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[5]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -244,7 +340,7 @@ func (x *TransferResponse) String() string {
 func (*TransferResponse) ProtoMessage() {}
 
 func (x *TransferResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_processor_proto_transaction_processor_service_proto_msgTypes[5]
+	mi := &file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -257,103 +353,121 @@ func (x *TransferResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferResponse.ProtoReflect.Descriptor instead.
 func (*TransferResponse) Descriptor() ([]byte, []int) {
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{5}
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP(), []int{7}
 }
 
-var File_transaction_processor_proto_transaction_processor_service_proto protoreflect.FileDescriptor
+var File_shared_proto_transaction_processor_proto_transaction_processor_service_proto protoreflect.FileDescriptor
 
-var file_transaction_processor_proto_transaction_processor_service_proto_rawDesc = []byte{
-	0x0a, 0x3f, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x70, 0x72,
-	0x6f, 0x63, 0x65, 0x73, 0x73, 0x6f, 0x72, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x72,
+var file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDesc = []byte{
+	0x0a, 0x4c, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74,
+	0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x63, 0x65,
+	0x73, 0x73, 0x6f, 0x72, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x6f, 0x72,
+	0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x56,
+	0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64,
+	0x18, 0x01, 0x20, 0x02, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x26,
+	0x0a, 0x0e, 0x69, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65,
+	0x18, 0x02, 0x20, 0x02, 0x28, 0x0d, 0x52, 0x0e, 0x69, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x42,
+	0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x22, 0x35, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x1c, 0x0a, 0x09, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x64, 0x18, 0x01, 0x20, 0x02,
+	0x28, 0x09, 0x52, 0x09, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x64, 0x22, 0x11, 0x0a,
+	0x0f, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x22, 0x12, 0x0a, 0x10, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5e, 0x0a, 0x0e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x18, 0x01, 0x20, 0x02, 0x28, 0x0d, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x16,
+	0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x02, 0x20, 0x02, 0x28, 0x09, 0x52, 0x06,
+	0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x49, 0x64, 0x18, 0x03, 0x20, 0x02, 0x28, 0x09, 0x52, 0x09, 0x61, 0x63, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x49, 0x64, 0x22, 0x11, 0x0a, 0x0f, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x11, 0x0a, 0x0f, 0x54, 0x72, 0x61, 0x6e, 0x73,
+	0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x12, 0x0a, 0x10, 0x54, 0x72,
+	0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xf5,
+	0x01, 0x0a, 0x1b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72,
+	0x6f, 0x63, 0x65, 0x73, 0x73, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x40,
+	0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12,
+	0x15, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41,
+	0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x31, 0x0a, 0x08, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x12, 0x10, 0x2e, 0x57,
+	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11,
+	0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x12, 0x2e, 0x0a, 0x07, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x0f,
+	0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x10, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x12, 0x31, 0x0a, 0x08, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x12,
+	0x10, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x11, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x51, 0x5a, 0x4f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x6f, 0x68, 0x61, 0x6d, 0x61, 0x64, 0x48, 0x61, 0x72, 0x69,
+	0x74, 0x68, 0x2f, 0x62, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2d, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x72,
+	0x2f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x72,
 	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73,
-	0x73, 0x6f, 0x72, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0x11, 0x0a, 0x0f, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x22, 0x12, 0x0a, 0x10, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5e, 0x0a, 0x0e, 0x44, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x02, 0x28, 0x0d, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x02, 0x20, 0x02,
-	0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x64, 0x18, 0x03, 0x20, 0x02, 0x28, 0x09, 0x52, 0x09, 0x61,
-	0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x64, 0x22, 0x11, 0x0a, 0x0f, 0x44, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x11, 0x0a, 0x0f, 0x54,
-	0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x12,
-	0x0a, 0x10, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x32, 0xb3, 0x01, 0x0a, 0x1b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x12, 0x31, 0x0a, 0x08, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x12, 0x10,
-	0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x11, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x2e, 0x0a, 0x07, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x12, 0x0f, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x10, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x31, 0x0a, 0x08, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65,
-	0x72, 0x12, 0x10, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x51, 0x5a, 0x4f, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x6f, 0x68, 0x61, 0x6d, 0x61, 0x64, 0x48, 0x61,
-	0x72, 0x69, 0x74, 0x68, 0x2f, 0x62, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2d, 0x6c, 0x65, 0x64, 0x67,
-	0x65, 0x72, 0x2f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
-	0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x63,
-	0x65, 0x73, 0x73, 0x6f, 0x72, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x6f, 0x72, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 }
 
 var (
-	file_transaction_processor_proto_transaction_processor_service_proto_rawDescOnce sync.Once
-	file_transaction_processor_proto_transaction_processor_service_proto_rawDescData = file_transaction_processor_proto_transaction_processor_service_proto_rawDesc
+	file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescOnce sync.Once
+	file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescData = file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDesc
 )
 
-func file_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP() []byte {
-	file_transaction_processor_proto_transaction_processor_service_proto_rawDescOnce.Do(func() {
-		file_transaction_processor_proto_transaction_processor_service_proto_rawDescData = protoimpl.X.CompressGZIP(file_transaction_processor_proto_transaction_processor_service_proto_rawDescData)
+func file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescGZIP() []byte {
+	file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescOnce.Do(func() {
+		file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescData = protoimpl.X.CompressGZIP(file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescData)
 	})
-	return file_transaction_processor_proto_transaction_processor_service_proto_rawDescData
+	return file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDescData
 }
 
-var file_transaction_processor_proto_transaction_processor_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_transaction_processor_proto_transaction_processor_service_proto_goTypes = []any{
-	(*WithdrawRequest)(nil),  // 0: WithdrawRequest
-	(*WithdrawResponse)(nil), // 1: WithdrawResponse
-	(*DepositRequest)(nil),   // 2: DepositRequest
-	(*DepositResponse)(nil),  // 3: DepositResponse
-	(*TransferRequest)(nil),  // 4: TransferRequest
-	(*TransferResponse)(nil), // 5: TransferResponse
+var file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_goTypes = []any{
+	(*CreateAccountRequest)(nil),  // 0: CreateAccountRequest
+	(*CreateAccountResponse)(nil), // 1: CreateAccountResponse
+	(*WithdrawRequest)(nil),       // 2: WithdrawRequest
+	(*WithdrawResponse)(nil),      // 3: WithdrawResponse
+	(*DepositRequest)(nil),        // 4: DepositRequest
+	(*DepositResponse)(nil),       // 5: DepositResponse
+	(*TransferRequest)(nil),       // 6: TransferRequest
+	(*TransferResponse)(nil),      // 7: TransferResponse
 }
-var file_transaction_processor_proto_transaction_processor_service_proto_depIdxs = []int32{
-	0, // 0: TransactionProcessorService.Withdraw:input_type -> WithdrawRequest
-	2, // 1: TransactionProcessorService.Deposit:input_type -> DepositRequest
-	4, // 2: TransactionProcessorService.Transfer:input_type -> TransferRequest
-	1, // 3: TransactionProcessorService.Withdraw:output_type -> WithdrawResponse
-	3, // 4: TransactionProcessorService.Deposit:output_type -> DepositResponse
-	5, // 5: TransactionProcessorService.Transfer:output_type -> TransferResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+var file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_depIdxs = []int32{
+	0, // 0: TransactionProcessorService.CreateAccount:input_type -> CreateAccountRequest
+	2, // 1: TransactionProcessorService.Withdraw:input_type -> WithdrawRequest
+	4, // 2: TransactionProcessorService.Deposit:input_type -> DepositRequest
+	6, // 3: TransactionProcessorService.Transfer:input_type -> TransferRequest
+	1, // 4: TransactionProcessorService.CreateAccount:output_type -> CreateAccountResponse
+	3, // 5: TransactionProcessorService.Withdraw:output_type -> WithdrawResponse
+	5, // 6: TransactionProcessorService.Deposit:output_type -> DepositResponse
+	7, // 7: TransactionProcessorService.Transfer:output_type -> TransferResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_transaction_processor_proto_transaction_processor_service_proto_init() }
-func file_transaction_processor_proto_transaction_processor_service_proto_init() {
-	if File_transaction_processor_proto_transaction_processor_service_proto != nil {
+func init() { file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_init() }
+func file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_init() {
+	if File_shared_proto_transaction_processor_proto_transaction_processor_service_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_transaction_processor_proto_transaction_processor_service_proto_rawDesc,
+			RawDescriptor: file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_transaction_processor_proto_transaction_processor_service_proto_goTypes,
-		DependencyIndexes: file_transaction_processor_proto_transaction_processor_service_proto_depIdxs,
-		MessageInfos:      file_transaction_processor_proto_transaction_processor_service_proto_msgTypes,
+		GoTypes:           file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_goTypes,
+		DependencyIndexes: file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_depIdxs,
+		MessageInfos:      file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_msgTypes,
 	}.Build()
-	File_transaction_processor_proto_transaction_processor_service_proto = out.File
-	file_transaction_processor_proto_transaction_processor_service_proto_rawDesc = nil
-	file_transaction_processor_proto_transaction_processor_service_proto_goTypes = nil
-	file_transaction_processor_proto_transaction_processor_service_proto_depIdxs = nil
+	File_shared_proto_transaction_processor_proto_transaction_processor_service_proto = out.File
+	file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_rawDesc = nil
+	file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_goTypes = nil
+	file_shared_proto_transaction_processor_proto_transaction_processor_service_proto_depIdxs = nil
 }
