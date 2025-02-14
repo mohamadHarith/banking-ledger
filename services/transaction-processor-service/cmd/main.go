@@ -3,12 +3,20 @@ package main
 import (
 	"log"
 	"net"
+	"time"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/handler"
+	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/mq"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/repository"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/transaction_processor_proto"
 	"google.golang.org/grpc"
 )
+
+func failOnError(err error, msg string) {
+	if err != nil {
+		log.Panicf("%s: %s", msg, err)
+	}
+}
 
 func main() {
 
@@ -18,9 +26,18 @@ func main() {
 	}
 
 	repo := repository.New()
+	mq := mq.New()
+	mq.PublishAccountBalance(123)
+	time.Sleep(time.Second * 2)
+	mq.PublishAccountBalance(124)
+	time.Sleep(time.Second * 2)
+
+	mq.PublishAccountBalance(125)
+
+	h := handler.New(repo)
 
 	srv := grpc.NewServer()
-	pb.RegisterTransactionProcessorServiceServer(srv, handler.New(repo))
+	pb.RegisterTransactionProcessorServiceServer(srv, h)
 
 	log.Println("transaction-processor-service started on port 5001")
 

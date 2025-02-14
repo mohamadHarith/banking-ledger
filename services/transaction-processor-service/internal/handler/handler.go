@@ -10,11 +10,13 @@ import (
 type transactionProcessorHandler struct {
 	pb.UnimplementedTransactionProcessorServiceServer
 	repository *repository.Repository
+	// mq         *mq.MQ
 }
 
 func New(repo *repository.Repository) *transactionProcessorHandler {
 	return &transactionProcessorHandler{
 		repository: repo,
+		// mq:         mq,
 	}
 }
 

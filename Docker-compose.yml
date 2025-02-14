@@ -23,6 +23,8 @@ services:
     restart: always
     environment:
       MONGO_INITDB_DATABASE: banking
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27017:27017"
     volumes:
@@ -41,10 +43,26 @@ services:
     networks:
       - banking_network
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_container
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - banking_network
+
 volumes:
   mysql_data:
   mongodb_data:
   redis_data:
+  rabbitmq_data:
 
 
 networks:
