@@ -10,8 +10,13 @@ type RabbitMQ struct {
 	Password string `env:"RABBITMQ_DEFAULT_PASS"`
 }
 
+type Redis struct {
+	Password string `env:""`
+}
+
 type configs struct {
 	RabbitMQ
+	Redis
 }
 
 var conf configs
