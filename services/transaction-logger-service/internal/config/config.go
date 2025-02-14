@@ -10,8 +10,15 @@ type RabbitMQ struct {
 	Password string `env:"RABBITMQ_DEFAULT_PASS"`
 }
 
+type MongoDB struct {
+	User     string `env:""`
+	Password string `env:""`
+	Database string `env:""`
+}
+
 type configs struct {
 	RabbitMQ
+	MongoDB
 }
 
 var conf configs
