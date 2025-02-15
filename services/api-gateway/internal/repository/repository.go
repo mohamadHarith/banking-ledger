@@ -24,15 +24,12 @@ func New() *Repository {
 		panic("nil redis client")
 	}
 
+	err := client.Ping(context.Background()).Err()
+	if err != nil {
+		panic(err)
+	}
+
 	return &Repository{
 		redis: client,
 	}
 }
-
-func (r *Repository) SetUserBalance(ctx context.Context, userId string, balance uint32) error {
-	return r.redis.Set(ctx, userId, balance, 0).Err()
-}
-
-// func (r *Repository) GetUserBalance(ctx context.Context, userId string, balance uint32) error {
-// 	return r.redis.Set(ctx, userId, balance, 0).Err()
-// }

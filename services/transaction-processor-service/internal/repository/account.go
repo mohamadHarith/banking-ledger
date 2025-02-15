@@ -1,13 +1,19 @@
 package repository
 
-import "context"
+import (
+	"context"
 
-func (r *Repository) InsertAccount(ctx context.Context, accountId, userId string, initialAmount uint32) error {
+	"github.com/mohamadHarith/banking-ledger/shared/entity"
+)
 
-	_, err := r.db.ExecContext(ctx, "INSERT INTO accounts (id, user_id, balance) VALUES (?, ?, ?)",
-		accountId,
-		userId,
-		initialAmount,
+func (r *Repository) InsertAccount(ctx context.Context, account *entity.Account) error {
+
+	_, err := r.db.ExecContext(ctx, "INSERT INTO accounts (id, user_id, balance, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+		account.Id,
+		account.UserId,
+		account.Balance,
+		account.CreatedAt,
+		account.UpdatedAt,
 	)
 
 	return err

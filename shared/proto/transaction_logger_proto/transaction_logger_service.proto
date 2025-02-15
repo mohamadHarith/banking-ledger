@@ -1,0 +1,31 @@
+option go_package = "github.com/mohamadHarith/baking-ledger/shared/proto/transaction_logger_proto";
+import "google/protobuf/timestamp.proto";
+
+service TransactionLoggerService {
+    rpc GetTransactionLogs (GetTransactionLogsRequest) returns (GetTransactionLogsResponse) {}
+}
+
+message GetTransactionLogsRequest{
+    required string userId = 1;
+    required string accountId = 2;
+    optional uint32 page = 3;
+}
+
+message GetTransactionLogsResponse{
+    repeated TransactionLog transactionLogs = 1;
+    required uint32 totalRecords = 2;
+    required uint32 currentPage = 3;
+    required uint32 totalPages = 4;
+    optional uint32 nextPage = 5;
+    optional uint32 prevPage = 6;
+}
+
+message TransactionLog{
+    required string id = 1;
+    required string accountId = 2;
+    required string userId = 3;
+    required int32 amount = 4;
+    required uint32 balance = 5;
+    required string description = 6;
+    required google.protobuf.Timestamp createdAt = 7;
+}

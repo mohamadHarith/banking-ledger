@@ -91,12 +91,12 @@ func (mq *MQ) ConsumeTransactionLog(ctx context.Context, res chan<- entity.Trans
 		case <-ctx.Done():
 			return nil
 		case d := <-msg:
-			r := shared.TransactionLogMessage{}
+			r := entity.TransactionLog{}
 			err = json.Unmarshal(d.Body, &r)
 			if err != nil {
 				return err
 			}
-			res <- r.TransactionLog
+			res <- r
 		}
 	}
 

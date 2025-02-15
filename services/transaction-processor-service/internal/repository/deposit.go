@@ -4,70 +4,66 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 )
 
-func (r *Repository) Deposit(ctx context.Context, amount uint32, userId, accountId string) error {
+func (r *Repository) WithdrawOrDeposit(ctx context.Context, amount int32, userId, accountId string, now time.Time) (uint32, error) {
 	tx, err := r.db.BeginTx(ctx, &sql.TxOptions{
 		Isolation: sql.LevelSerializable,
 	})
 	if err != nil {
-		return err
+		return 0, err
 	}
-
-	defer func() {
-		if err != nil {
-			tx.Rollback()
-		}
-	}()
 
 	query := `
 	SELECT EXISTS (
-		SELECT * FROM ACCOUNTS WHERE user_id = $1 AND id = $2;
+		SELECT * FROM accounts WHERE user_id = ? AND id = ?
 	);
 	`
 
 	var exists bool
 	row := tx.QueryRowContext(ctx, query, userId, accountId)
 	if err := row.Scan(&exists); err != nil {
-		return err
+		tx.Rollback()
+		return 0, err
 	}
 
 	if !exists {
-		return fmt.Errorf("user account for %v does not exist", userId)
+		return 0, fmt.Errorf("user account for %v does not exist", userId)
 	}
 
 	query = `
-	SELECT balance FROM accounts WHERE user_id = $1 AND id = $2 FOR UPDATE;
+	SELECT balance FROM accounts WHERE user_id = ? AND id = ? FOR UPDATE;
 	`
 
-	var balance uint32
+	var balance int32
 	row = tx.QueryRowContext(ctx, query, userId, accountId)
 	err = row.Scan(&balance)
 	if err != nil {
-		return err
+		tx.Rollback()
+		return 0, err
 	}
 
 	balance += amount
-
-	query = `
-	UPDATE accounts SET balance = $1 WHERE user_id $2 AND id = $3;
-	`
-
-	_, err = tx.ExecContext(ctx, query, balance, userId, accountId)
-	if err != nil {
-		return err
+	if balance < 0 {
+		return 0, fmt.Errorf("insufficient balance %v for amount %v", balance, amount)
 	}
 
-	query = `INSERT INTO accounts columns(user_id, balance) VALUES ($1, $2)`
-	_, err = tx.ExecContext(ctx, query, userId, accountId)
+	query = `
+	UPDATE accounts SET balance = ?, updated_at = ? WHERE user_id = ? AND id = ?;
+	`
+
+	_, err = tx.ExecContext(ctx, query, balance, now, userId, accountId)
 	if err != nil {
-		return err
+		tx.Rollback()
+		return 0, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		return err
+		tx.Rollback()
+		return 0, err
 	}
 
-	return nil
+	return uint32(balance), nil
 }

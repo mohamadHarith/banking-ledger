@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/config"
+	"github.com/mohamadHarith/banking-ledger/shared/entity"
 	shared "github.com/mohamadHarith/banking-ledger/shared/mq"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -70,7 +71,7 @@ func New() *MQ {
 	}
 }
 
-func (mq *MQ) ConsumeAccountBalance(ctx context.Context, res chan<- uint32) error {
+func (mq *MQ) ConsumeAccountBalance(ctx context.Context, res chan<- entity.Account) error {
 
 	msg, err := mq.channel.Consume(
 		shared.TransactionBalanceQueue,
@@ -90,12 +91,12 @@ func (mq *MQ) ConsumeAccountBalance(ctx context.Context, res chan<- uint32) erro
 		case <-ctx.Done():
 			return nil
 		case d := <-msg:
-			r := shared.AccountBalanceMessage{}
+			r := entity.Account{}
 			err = json.Unmarshal(d.Body, &r)
 			if err != nil {
 				return err
 			}
-			res <- r.Balance
+			res <- r
 		}
 	}
 

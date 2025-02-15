@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/config"
+	"github.com/mohamadHarith/banking-ledger/shared/entity"
 	shared "github.com/mohamadHarith/banking-ledger/shared/mq"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -46,14 +47,31 @@ func New() *MQ {
 	}
 }
 
-func (mq *MQ) PublishAccountBalance(balance uint32) error {
+func (mq *MQ) PublishAccountBalance(r entity.Account) error {
 
-	r := shared.AccountBalanceMessage{Balance: balance}
 	j, _ := json.Marshal(r)
 
 	err := mq.channel.Publish(
 		shared.MQExchange,
 		shared.TransactionBalanceRoutingKey,
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        j,
+		},
+	)
+
+	return err
+}
+
+func (mq *MQ) PublishTransactionLog(r entity.TransactionLog) error {
+
+	j, _ := json.Marshal(r)
+
+	err := mq.channel.Publish(
+		shared.MQExchange,
+		shared.TransactionLogRoutingKey,
 		false,
 		false,
 		amqp.Publishing{

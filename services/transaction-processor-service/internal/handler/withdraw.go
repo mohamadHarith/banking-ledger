@@ -11,17 +11,22 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (h *transactionProcessorHandler) Deposit(ctx context.Context, req *pb.DepositRequest) (resp *emptypb.Empty, err error) {
+func (h *transactionProcessorHandler) Withdraw(ctx context.Context, req *pb.WithdrawRequest) (resp *emptypb.Empty, err error) {
 	resp = &emptypb.Empty{}
 
 	now := time.Now().In(time.Local)
 
-	balance, err := h.repository.WithdrawOrDeposit(ctx, int32(*req.Amount), *req.UserId, *req.AccountId, now)
+	amt := int32(*req.Amount)
+	if amt > 0 {
+		amt = -amt
+	}
+
+	balance, err := h.repository.WithdrawOrDeposit(ctx, amt, *req.UserId, *req.AccountId, now)
 	if err != nil {
 		return resp, err
 	}
 
-	description := "Cash Deposit"
+	description := "Cash Withdrawal"
 	if req.Description != nil && *req.Description != "" {
 		description = *req.Description
 	}
@@ -42,8 +47,8 @@ func (h *transactionProcessorHandler) Deposit(ctx context.Context, req *pb.Depos
 			Id:          uuid.NewString(),
 			AccountId:   *req.AccountId,
 			UserId:      *req.UserId,
-			Amount:      int32(*req.Amount),
 			Balance:     balance,
+			Amount:      -int32(*req.Amount),
 			Description: description,
 			CreatedAt:   now,
 		})

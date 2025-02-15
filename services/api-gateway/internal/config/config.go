@@ -11,7 +11,7 @@ type RabbitMQ struct {
 }
 
 type Redis struct {
-	Password string `env:""`
+	Password string `env:"REDIS_PASSWORD"`
 }
 
 type configs struct {

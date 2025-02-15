@@ -6,6 +6,7 @@ import (
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/mq"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/repository"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/transaction_processor_proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type transactionProcessorHandler struct {
@@ -21,10 +22,6 @@ func New(repo *repository.Repository, mq *mq.MQ) *transactionProcessorHandler {
 	}
 }
 
-func (h *transactionProcessorHandler) Withdraw(ctx context.Context, req *pb.WithdrawRequest) (resp *pb.WithdrawResponse, err error) {
-	return
-}
-
-func (h *transactionProcessorHandler) Transfer(ctx context.Context, req *pb.TransferRequest) (resp *pb.TransferResponse, err error) {
+func (h *transactionProcessorHandler) Transfer(ctx context.Context, req *pb.TransferRequest) (resp *emptypb.Empty, err error) {
 	return
 }

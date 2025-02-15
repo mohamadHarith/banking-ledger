@@ -11,9 +11,9 @@ type RabbitMQ struct {
 }
 
 type MongoDB struct {
-	User     string `env:""`
-	Password string `env:""`
-	Database string `env:""`
+	User     string `env:"MONGODB_USERNAME"`
+	Password string `env:"MONGODB_PASSWORD"`
+	Database string `env:"MONGODB_DATABASE"`
 }
 
 type configs struct {

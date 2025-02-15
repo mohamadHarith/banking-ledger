@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,9 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TransactionProcessorServiceClient interface {
 	CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
-	Withdraw(ctx context.Context, in *WithdrawRequest, opts ...grpc.CallOption) (*WithdrawResponse, error)
-	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
-	Transfer(ctx context.Context, in *TransferRequest, opts ...grpc.CallOption) (*TransferResponse, error)
+	Withdraw(ctx context.Context, in *WithdrawRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Transfer(ctx context.Context, in *TransferRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type transactionProcessorServiceClient struct {
@@ -45,8 +46,8 @@ func (c *transactionProcessorServiceClient) CreateAccount(ctx context.Context, i
 	return out, nil
 }
 
-func (c *transactionProcessorServiceClient) Withdraw(ctx context.Context, in *WithdrawRequest, opts ...grpc.CallOption) (*WithdrawResponse, error) {
-	out := new(WithdrawResponse)
+func (c *transactionProcessorServiceClient) Withdraw(ctx context.Context, in *WithdrawRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/TransactionProcessorService/Withdraw", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -54,8 +55,8 @@ func (c *transactionProcessorServiceClient) Withdraw(ctx context.Context, in *Wi
 	return out, nil
 }
 
-func (c *transactionProcessorServiceClient) Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error) {
-	out := new(DepositResponse)
+func (c *transactionProcessorServiceClient) Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/TransactionProcessorService/Deposit", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +64,8 @@ func (c *transactionProcessorServiceClient) Deposit(ctx context.Context, in *Dep
 	return out, nil
 }
 
-func (c *transactionProcessorServiceClient) Transfer(ctx context.Context, in *TransferRequest, opts ...grpc.CallOption) (*TransferResponse, error) {
-	out := new(TransferResponse)
+func (c *transactionProcessorServiceClient) Transfer(ctx context.Context, in *TransferRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/TransactionProcessorService/Transfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -77,9 +78,9 @@ func (c *transactionProcessorServiceClient) Transfer(ctx context.Context, in *Tr
 // for forward compatibility
 type TransactionProcessorServiceServer interface {
 	CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
-	Withdraw(context.Context, *WithdrawRequest) (*WithdrawResponse, error)
-	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
-	Transfer(context.Context, *TransferRequest) (*TransferResponse, error)
+	Withdraw(context.Context, *WithdrawRequest) (*emptypb.Empty, error)
+	Deposit(context.Context, *DepositRequest) (*emptypb.Empty, error)
+	Transfer(context.Context, *TransferRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedTransactionProcessorServiceServer()
 }
 
@@ -90,13 +91,13 @@ type UnimplementedTransactionProcessorServiceServer struct {
 func (UnimplementedTransactionProcessorServiceServer) CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
 }
-func (UnimplementedTransactionProcessorServiceServer) Withdraw(context.Context, *WithdrawRequest) (*WithdrawResponse, error) {
+func (UnimplementedTransactionProcessorServiceServer) Withdraw(context.Context, *WithdrawRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Withdraw not implemented")
 }
-func (UnimplementedTransactionProcessorServiceServer) Deposit(context.Context, *DepositRequest) (*DepositResponse, error) {
+func (UnimplementedTransactionProcessorServiceServer) Deposit(context.Context, *DepositRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
 }
-func (UnimplementedTransactionProcessorServiceServer) Transfer(context.Context, *TransferRequest) (*TransferResponse, error) {
+func (UnimplementedTransactionProcessorServiceServer) Transfer(context.Context, *TransferRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Transfer not implemented")
 }
 func (UnimplementedTransactionProcessorServiceServer) mustEmbedUnimplementedTransactionProcessorServiceServer() {
