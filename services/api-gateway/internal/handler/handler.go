@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"sync"
 	"sync/atomic"
 
@@ -19,7 +18,6 @@ import (
 )
 
 type Handler struct {
-	transactionProcessor  pb.TransactionProcessorServiceClient
 	transactionProcessors []pb.TransactionProcessorServiceClient
 	transactionLogger     pb3.TransactionLoggerServiceClient
 	authenticator         pb2.AuthServiceClient
@@ -67,28 +65,32 @@ func New(r *repository.Repository) *Handler {
 		}
 
 		// multiple transaction processors for load balancing
-		if conf.IsDevelopmentEnvironment() {
-			for i := 1; i <= 2; i++ {
-				transactionProcessorHost := conf.TransactionProcessorService.ServiceName + strconv.Itoa(i)
+		transactionProcessorHost := conf.TransactionProcessorService.ServiceName
+		if conf.IsLocalEnvironment() {
+			transactionProcessorHost = "localhost"
+		}
 
-				conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
-				if err != nil {
-					panic(err)
-				}
+		conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+		if err != nil {
+			panic(err)
+		}
 
-				client := pb.NewTransactionProcessorServiceClient(conn)
-				h.transactionProcessors = append(h.transactionProcessors, client)
-			}
-		} else {
-			transactionProcessorHost := "localhost"
+		client := pb.NewTransactionProcessorServiceClient(conn)
+		h.transactionProcessors = append(h.transactionProcessors, client)
 
-			conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+		if !conf.IsLocalEnvironment() {
+			transactionProcessorHost = conf.TransactionProcessorService.ServiceName2
+			conn, err = grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort2), grpc.WithInsecure(), grpc.WithBlock())
 			if err != nil {
 				panic(err)
 			}
 
-			client := pb.NewTransactionProcessorServiceClient(conn)
-			h.transactionProcessor = client
+			client = pb.NewTransactionProcessorServiceClient(conn)
+			h.transactionProcessors = append(h.transactionProcessors, client)
+		}
+
+		if len(h.transactionProcessors) < 1 {
+			panic("transaction processors not initialized")
 		}
 
 		handler = h
@@ -100,11 +102,6 @@ func New(r *repository.Repository) *Handler {
 var currentIndex uint32
 
 func (h *Handler) getNextTransactionProcessor() pb.TransactionProcessorServiceClient {
-	conf := config.GetConf()
-	if conf.IsLocalEnvironment() {
-		return h.transactionProcessor
-	}
-
 	index := atomic.AddUint32(&currentIndex, 1)
 	return h.transactionProcessors[(index-1)%uint32(len(h.transactionProcessors))]
 }

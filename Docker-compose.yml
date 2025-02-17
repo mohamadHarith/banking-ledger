@@ -48,8 +48,8 @@ services:
       - "${TRANSACTION_LOGGER_SERVICE_PORT}:${TRANSACTION_LOGGER_SERVICE_PORT}"
     networks:
       - banking_network
-  transaction-processor-service:
-    hostname: transaction-processor-container
+  transaction-processor-service-1:
+    container_name: transaction-processor-container-1
     build:
       context: .
       dockerfile: ./services/transaction-processor-service/Dockerfile
@@ -62,9 +62,24 @@ services:
       - ENV=dev
     ports:
       - "${TRANSACTION_PROCESSOR_SERVICE_PORT}:${TRANSACTION_PROCESSOR_SERVICE_PORT}"
-    deploy:
-      mode: replicated
-      replicas: 2
+    networks:
+      - banking_network
+  transaction-processor-service-2:
+    container_name: transaction-processor-container-2
+    build:
+      context: .
+      dockerfile: ./services/transaction-processor-service/Dockerfile
+      args:
+        PORT: ${TRANSACTION_PROCESSOR_SERVICE_PORT_END}
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ENV=dev
+      - TRANSACTION_PROCESSOR_SERVICE_NAME=transaction-processor-service-2
+      - TRANSACTION_PROCESSOR_SERVICE_PORT=TRANSACTION_PROCESSOR_SERVICE_PORT_END
+    ports:
+      - "${TRANSACTION_PROCESSOR_SERVICE_PORT_END}:${TRANSACTION_PROCESSOR_SERVICE_PORT_END}"
     networks:
       - banking_network
   mysql:

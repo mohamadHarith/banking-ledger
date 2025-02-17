@@ -29,8 +29,10 @@ type TransactionLoggerService struct {
 }
 
 type TransactionProcessorService struct {
-	ServiceName string `env:"TRANSACTION_PROCESSOR_SERVICE_NAME"`
-	ServicePort string `env:"TRANSACTION_PROCESSOR_SERVICE_PORT"`
+	ServiceName  string `env:"TRANSACTION_PROCESSOR_SERVICE_NAME"`
+	ServicePort  string `env:"TRANSACTION_PROCESSOR_SERVICE_PORT"`
+	ServiceName2 string `env:"TRANSACTION_PROCESSOR_SERVICE_NAME_END"`
+	ServicePort2 string `env:"TRANSACTION_PROCESSOR_SERVICE_PORT_END"`
 }
 
 type configs struct {
