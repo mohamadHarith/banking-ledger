@@ -53,12 +53,13 @@ This architecture diagram represents a banking ledger system with multiple micro
 
 
 ## 🧩 Service Explanations (`services/`):
-| Service Name                       | Description                                         | Port |
-|------------------------------------|-----------------------------------------------------|------|
-| **api-gateway/**                   | Manages API endpoints and routes requests           | 5001 |
-| **authentication-service/**        | Auhtenticates user                                  | 5002 |
-| **transaction-logger-service/**    | Stores and receives transaction logs (ledger)       | 5003 |
-| **transaction-processor-service/** | Processes account creation deposits,and withdrawals | 5004 |
+| Service Name                       | Description                                           | Port |
+|------------------------------------|-------------------------------------------------------|------|
+| **api-gateway/**                   | Manages API endpoints and routes requests             | 5001 |
+| **authentication-service/**        | Authenticates user                                    | 5002 |
+| **transaction-logger-service/**    | Stores and receives transaction logs (ledger)         | 5003 |
+| **transaction-processor-service-1/** | Processes account creation deposits,and withdrawals | 5004 |
+| **transaction-processor-service-1/** | Processes account creation deposits,and withdrawals | 5004 |
 
 
 ## 📦 Installation & Usage
@@ -158,7 +159,7 @@ curl --location 'localhost:5001/deposit' \
 ```
 
 Sample response:
-```
+```json
 {
     "errorCode": 200,
     "message": "success"
