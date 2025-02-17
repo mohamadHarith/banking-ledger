@@ -72,10 +72,12 @@ func (r *Repository) GetTransactionLogs(
 	cursor, err := r.db.Collection("transaction_log").Find(ctx, bson.M{
 		"userId":    userId,
 		"accountId": accountId,
-	})
+	}, findOptions)
 	if err != nil {
 		return
 	}
+
+	defer cursor.Close(ctx)
 
 	err = cursor.All(ctx, &txnLogs)
 	if err != nil {

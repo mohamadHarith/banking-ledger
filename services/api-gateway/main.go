@@ -51,6 +51,7 @@ func main() {
 	mux.Handle("/deposit", h.Authenticate(http.HandlerFunc(h.Deposit)))
 	mux.Handle("/withdraw", h.Authenticate(http.HandlerFunc(h.Withdraw)))
 	mux.Handle("/balance", h.Authenticate(http.HandlerFunc(h.GetBalance)))
+	mux.Handle("/transactions", h.Authenticate(h.GetTransactions))
 
 	// mux.Handle("/transfer", nil)
 

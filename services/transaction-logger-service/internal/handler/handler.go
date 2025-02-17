@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"log"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/repository"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/transaction_logger_proto"
@@ -26,6 +27,8 @@ func (h *Handler) GetTransactionLogs(ctx context.Context, req *pb.GetTransaction
 	if err != nil {
 		return nil, err
 	}
+
+	log.Println("here=> ", txnLogs)
 
 	resp.CurrentPage = req.Page
 	resp.TotalPages = &totNoOfPages
