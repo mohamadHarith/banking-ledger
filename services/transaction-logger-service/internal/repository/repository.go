@@ -44,6 +44,10 @@ func New() *Repository {
 	}
 }
 
+func (r *Repository) Close() {
+	r.mgo.Disconnect(context.Background())
+}
+
 func (r *Repository) InsertTransactionLog(ctx context.Context, l entity.TransactionLog) error {
 	_, err := r.db.Collection("transaction_log").InsertOne(ctx, l)
 

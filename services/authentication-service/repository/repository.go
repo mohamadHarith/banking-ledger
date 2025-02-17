@@ -38,6 +38,10 @@ func New() *Repository {
 	return r
 }
 
+func (r *Repository) Close() {
+	r.db.Close()
+}
+
 func (r *Repository) migrateTables() error {
 	query := `
 	CREATE TABLE IF NOT EXISTS users (

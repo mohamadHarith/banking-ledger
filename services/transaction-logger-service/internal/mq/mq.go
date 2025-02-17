@@ -76,6 +76,11 @@ func New() *MQ {
 	}
 }
 
+func (mq *MQ) Close() {
+	mq.channel.Close()
+	mq.conn.Close()
+}
+
 func (mq *MQ) ConsumeTransactionLog(ctx context.Context, res chan<- entity.TransactionLog) error {
 
 	msg, err := mq.channel.Consume(

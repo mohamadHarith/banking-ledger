@@ -23,7 +23,10 @@ func main() {
 	}
 
 	repo := repository.New()
+	defer repo.Close()
+
 	mq := mq.New()
+	defer mq.Close()
 
 	h := handler.New(repo, mq)
 

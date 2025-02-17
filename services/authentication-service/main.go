@@ -14,6 +14,7 @@ import (
 
 func main() {
 	repo := repository.New()
+	defer repo.Close()
 
 	h := handler.New(repo)
 

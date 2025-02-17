@@ -106,3 +106,8 @@ func (mq *MQ) ConsumeAccountBalance(ctx context.Context, res chan<- entity.Accou
 	}
 
 }
+
+func (mq *MQ) Close() {
+	mq.conn.Close()
+	mq.channel.Close()
+}

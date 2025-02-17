@@ -52,6 +52,11 @@ func New() *MQ {
 	}
 }
 
+func (mq *MQ) Close() {
+	mq.channel.Close()
+	mq.channel.Close()
+}
+
 func (mq *MQ) PublishAccountBalance(r entity.Account) error {
 
 	j, _ := json.Marshal(r)

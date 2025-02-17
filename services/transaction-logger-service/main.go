@@ -18,7 +18,10 @@ import (
 func main() {
 
 	repo := repository.New()
+	defer repo.Close()
+
 	mq := mq.New()
+	defer mq.Close()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -29,10 +32,15 @@ func main() {
 	go mq.ConsumeTransactionLog(ctx, res)
 
 	go func() {
-		for txn := range res {
-			log.Println(txn)
-			if err := repo.InsertTransactionLog(ctx, txn); err != nil {
-				log.Println(err)
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case txn := <-res:
+				log.Println(txn)
+				if err := repo.InsertTransactionLog(ctx, txn); err != nil {
+					log.Println(err)
+				}
 			}
 		}
 	}()

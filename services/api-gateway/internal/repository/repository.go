@@ -39,3 +39,7 @@ func New() *Repository {
 		redis: client,
 	}
 }
+
+func (r *Repository) Close() {
+	r.Close()
+}

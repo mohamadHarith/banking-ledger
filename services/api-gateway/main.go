@@ -15,7 +15,10 @@ import (
 
 func main() {
 	msq := mq.New()
+	defer msq.Close()
+
 	repo := repository.New()
+	defer repo.Close()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -31,7 +34,6 @@ func main() {
 			case <-ctx.Done():
 				return
 			case r := <-res:
-				log.Println("account balance => ", r)
 				err := repo.SetUserBalance(ctx, r.UserId, r.Id, r.Balance)
 				if err != nil {
 					log.Println(err)
@@ -53,11 +55,12 @@ func main() {
 	mux.Handle("/balance", h.Authenticate(http.HandlerFunc(h.GetBalance)))
 	mux.Handle("/transactions", h.Authenticate(h.GetTransactions))
 
-	// mux.Handle("/transfer", nil)
-
 	conf := config.GetConf()
 
 	log.Printf("[%v] started on port [:%v]\n", conf.ServiceName, conf.ServicePort)
 
-	http.ListenAndServe(fmt.Sprintf(":%v", conf.ServicePort), mux)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", conf.ServicePort), mux)
+	if err != nil {
+		panic(err)
+	}
 }
