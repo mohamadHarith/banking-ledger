@@ -11,7 +11,7 @@ A backend service built as part of an assessment for Goland Developer position a
 - Reliable and scalable transactions logging using message queues
 - ACID compliance for financial operations
 - Horizontally scalled service
-- Secured APIs using JWT authentication
+- Secure APIs using JWT authentication
 
 ## 🧱 Technology Stack
 - **Golang** for backend services
@@ -19,9 +19,37 @@ A backend service built as part of an assessment for Goland Developer position a
 - **MongoDB** for transaction logs
 - **RabbitMQ** for message queue
 - **Docker Compose** for container orchestration
+- **gRPC** for RPC calls 
 
 ## 🏗️ Architecture Overview
-![Bank System-Page-2 drawio (1)](https://github.com/user-attachments/assets/4f573e42-894f-4a37-a1f3-723d14449b7c)
+
+![Bank System-Page-2 drawio (2)](https://github.com/user-attachments/assets/c6f4c440-332a-41a3-ac12-7ac9ad4ffc91)
+
+This architecture diagram represents a banking ledger system with multiple microservices communicating via RabbitMQ and an API Gateway. Below is an overview of the components:
+
+**API Gateway**:
+- Acts as the single entry point for client requests.
+- Subscribes to `transaction_balance_queue` from RabbitMQ.
+- Caches account balances in Redis for fast retrieval.
+- Load balances the request to `transaction-processor-1` and `transaction-processor-2`
+
+**Authentication Service**: 
+- Creates user accounts.
+- Manages user authentication.
+
+**Transaction Processor Services (1 and 2)**:
+- Process financial transactions.
+- Publish transaction logs (`transaction.log`) and account balances (`transaction.balance`) to RabbitMQ via `transaction_exchange`.
+- Store transaction results in MySQL.
+
+**Transaction Logger Service**:  
+- Subscribes to `transaction_log_queue` from RabbitMQ.  
+- Stores transaction logs in MongoDB.  
+
+**Redis**: Caches account balances received from the API Gateway to reduce database load. 
+
+**RabbitMQ (Message Broker)**: Handles asynchronous communication.  
+ 
 
 
 ## 🧩 Service Explanations (`services/`):
