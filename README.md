@@ -276,7 +276,7 @@ Sample response:
 }
 ```
 
-## ✅ Improvements
+## ✅ Future Improvements
 - Add rate limiting to prevent abuse
 - Add distributed tracing and logging
 - Add more robust tests
