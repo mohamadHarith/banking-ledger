@@ -83,7 +83,7 @@ Sample response:
 }
 ```
 
--**Account:**
+- **Account:**
 To create ledger account with initial balance  
 Sample request:
 ```console
@@ -110,7 +110,7 @@ Sample response:
 }
 ```
 
--**Deposit:**
+- **Deposit:**
 To deposit funds to an account  
 Sample request:
 ```console
@@ -132,7 +132,7 @@ Sample response:
 }
 ```
 
--**Withdraw:**
+- **Withdraw:**
 To withdraw funds from an account  
 Sample request:
 ```console
@@ -154,7 +154,7 @@ Sample response:
 }
 ```
 
--**Balance:**
+- **Balance:**
 To get balance for an account  
 Sample request:
 ```console
@@ -177,7 +177,7 @@ Sample response:
 }
 ```
 
--**Transactions:**
+- **Transactions:**
 To get transaction logs/ ledger for an account  
 Sample request:  
 ```console
@@ -191,7 +191,7 @@ curl --location 'localhost:5001/transactions' \
 ```
 
 Sample response:  
-```
+```json
 {
     "errorCode": 200,
     "item": [
