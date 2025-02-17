@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"log"
+	"sync"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/repository"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/transaction_logger_proto"
@@ -14,10 +15,17 @@ type Handler struct {
 	repository *repository.Repository
 }
 
+var handler *Handler
+var once sync.Once
+
 func New(r *repository.Repository) *Handler {
-	return &Handler{
-		repository: r,
-	}
+	once.Do(func() {
+		handler = &Handler{
+			repository: r,
+		}
+	})
+
+	return handler
 }
 
 func (h *Handler) GetTransactionLogs(ctx context.Context, req *pb.GetTransactionLogsRequest) (resp *pb.GetTransactionLogsResponse, err error) {

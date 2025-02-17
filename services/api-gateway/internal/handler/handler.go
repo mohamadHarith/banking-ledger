@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/config"
@@ -23,53 +24,60 @@ type Handler struct {
 	repository           *repository.Repository
 }
 
+var handler *Handler
+var once sync.Once
+
 func New(r *repository.Repository) *Handler {
+	once.Do(func() {
 
-	conf := config.GetConf()
+		conf := config.GetConf()
 
-	transactionProcessorHost := conf.TransactionProcessorService.ServiceName
-	if conf.IsLocalEnvironment() {
-		transactionProcessorHost = "localhost"
-	}
+		transactionProcessorHost := conf.TransactionProcessorService.ServiceName
+		if conf.IsLocalEnvironment() {
+			transactionProcessorHost = "localhost"
+		}
 
-	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
-	if err != nil {
-		panic(err)
-	}
+		conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+		if err != nil {
+			panic(err)
+		}
 
-	client := pb.NewTransactionProcessorServiceClient(conn)
+		client := pb.NewTransactionProcessorServiceClient(conn)
 
-	authenticationServiceHost := conf.AuthenticationService.ServiceName
-	if conf.IsLocalEnvironment() {
-		authenticationServiceHost = "localhost"
-	}
+		authenticationServiceHost := conf.AuthenticationService.ServiceName
+		if conf.IsLocalEnvironment() {
+			authenticationServiceHost = "localhost"
+		}
 
-	conn2, err := grpc.NewClient(fmt.Sprintf("%v:%v", authenticationServiceHost, conf.AuthenticationService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
-	if err != nil {
-		panic(err)
-	}
+		conn2, err := grpc.NewClient(fmt.Sprintf("%v:%v", authenticationServiceHost, conf.AuthenticationService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+		if err != nil {
+			panic(err)
+		}
 
-	client2 := pb2.NewAuthServiceClient(conn2)
+		client2 := pb2.NewAuthServiceClient(conn2)
 
-	transactionLoggerHost := conf.TransactionLoggerService.ServiceName
-	if conf.IsLocalEnvironment() {
-		transactionLoggerHost = "localhost"
-	}
+		transactionLoggerHost := conf.TransactionLoggerService.ServiceName
+		if conf.IsLocalEnvironment() {
+			transactionLoggerHost = "localhost"
+		}
 
-	conn3, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionLoggerHost, conf.TransactionLoggerService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
-	if err != nil {
-		panic(err)
-	}
+		conn3, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionLoggerHost, conf.TransactionLoggerService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+		if err != nil {
+			panic(err)
+		}
 
-	client3 := pb3.NewTransactionLoggerServiceClient(conn3)
+		client3 := pb3.NewTransactionLoggerServiceClient(conn3)
 
-	return &Handler{
-		transactionProcessor: client,
-		transactionLogger:    client3,
-		validator:            validator.New(validator.WithRequiredStructEnabled()).Struct,
-		repository:           r,
-		authenticator:        client2,
-	}
+		handler = &Handler{
+			transactionProcessor: client,
+			transactionLogger:    client3,
+			validator:            validator.New(validator.WithRequiredStructEnabled()).Struct,
+			repository:           r,
+			authenticator:        client2,
+		}
+	})
+
+	return handler
 }
 
 func writeResp(w http.ResponseWriter, message string, statusCode int32, item any, items []any, pagination ...dto.Pagination) {

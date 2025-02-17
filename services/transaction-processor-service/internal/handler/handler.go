@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"sync"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/mq"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/repository"
@@ -15,11 +16,18 @@ type transactionProcessorHandler struct {
 	mq         *mq.MQ
 }
 
+var handler *transactionProcessorHandler
+var once sync.Once
+
 func New(repo *repository.Repository, mq *mq.MQ) *transactionProcessorHandler {
-	return &transactionProcessorHandler{
-		repository: repo,
-		mq:         mq,
-	}
+	once.Do(func() {
+		handler = &transactionProcessorHandler{
+			repository: repo,
+			mq:         mq,
+		}
+	})
+
+	return handler
 }
 
 func (h *transactionProcessorHandler) Transfer(ctx context.Context, req *pb.TransferRequest) (resp *emptypb.Empty, err error) {

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/config"
 	"github.com/mohamadHarith/banking-ledger/shared/entity"
@@ -16,32 +17,39 @@ type Repository struct {
 	db  *mongo.Database
 }
 
+var repo *Repository
+var once sync.Once
+
 func New() *Repository {
-	conf := config.GetConf()
+	once.Do(func() {
+		conf := config.GetConf()
 
-	mongodbHost := conf.MongoDB.ServiceName
-	if conf.IsLocalEnvironment() {
-		mongodbHost = "localhost"
-	}
+		mongodbHost := conf.MongoDB.ServiceName
+		if conf.IsLocalEnvironment() {
+			mongodbHost = "localhost"
+		}
 
-	uri := fmt.Sprintf("mongodb://%v:%v@%v:27017/?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=%v&authMechanism=SCRAM-SHA-256", conf.MongoDB.User, conf.MongoDB.Password, mongodbHost, conf.MongoDB.Database)
+		uri := fmt.Sprintf("mongodb://%v:%v@%v:27017/?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=%v&authMechanism=SCRAM-SHA-256", conf.MongoDB.User, conf.MongoDB.Password, mongodbHost, conf.MongoDB.Database)
 
-	mgo, err := mongo.Connect(options.Client().ApplyURI(uri))
-	if err != nil {
-		panic(err)
-	}
+		mgo, err := mongo.Connect(options.Client().ApplyURI(uri))
+		if err != nil {
+			panic(err)
+		}
 
-	err = mgo.Ping(context.Background(), nil)
-	if err != nil {
-		panic(err)
-	}
+		err = mgo.Ping(context.Background(), nil)
+		if err != nil {
+			panic(err)
+		}
 
-	db := mgo.Database("banking")
+		db := mgo.Database("banking")
 
-	return &Repository{
-		mgo: mgo,
-		db:  db,
-	}
+		repo = &Repository{
+			mgo: mgo,
+			db:  db,
+		}
+	})
+
+	return repo
 }
 
 func (r *Repository) Close() {

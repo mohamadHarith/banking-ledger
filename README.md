@@ -40,6 +40,8 @@ A backend service built as part of an assessment for Goland Developer position a
 docker-compose up --build
 ```
 
+Note: Normally we do not commit `.env` file to the repository. It should be confidential and should be handled using tools like secrets manager. However, for the sake of simiplicity for this task, we have commited the environment variables file in this repo.
+
 ### REST APIs
 - **Create User:**
 To create user account

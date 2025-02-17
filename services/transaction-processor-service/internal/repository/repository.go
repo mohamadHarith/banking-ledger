@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/config"
@@ -12,28 +13,33 @@ type Repository struct {
 	db *sql.DB
 }
 
+var repo *Repository
+var once sync.Once
+
 func New() *Repository {
-	cfg := config.GetConf()
+	once.Do(func() {
+		cfg := config.GetConf()
 
-	mysqlHost := cfg.MySql.ServiceName
-	if cfg.IsLocalEnvironment() {
-		mysqlHost = "localhost"
-	}
+		mysqlHost := cfg.MySql.ServiceName
+		if cfg.IsLocalEnvironment() {
+			mysqlHost = "localhost"
+		}
 
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, mysqlHost, cfg.MySql.Database)
+		dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, mysqlHost, cfg.MySql.Database)
 
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
+		db, err := sql.Open("mysql", dsn)
+		if err != nil {
+			panic(err)
+		}
+
+		repo = &Repository{db: db}
+	})
+
+	if err := repo.migrateTables(); err != nil {
 		panic(err)
 	}
 
-	r := &Repository{db: db}
-
-	if err := r.migrateTables(); err != nil {
-		panic(err)
-	}
-
-	return r
+	return repo
 }
 
 func (r *Repository) Close() {

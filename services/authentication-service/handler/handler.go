@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -20,12 +21,19 @@ type Handler struct {
 	repository *repository.Repository
 }
 
-const SecretKey = "hkjb9724$"
+const secretKey = "hkjb9724$"
+
+var handler *Handler
+var once sync.Once
 
 func New(repo *repository.Repository) *Handler {
-	return &Handler{
-		repository: repo,
-	}
+	once.Do(func() {
+		handler = &Handler{
+			repository: repo,
+		}
+	})
+
+	return handler
 }
 
 func (h *Handler) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*emptypb.Empty, error) {
@@ -71,7 +79,7 @@ func (h *Handler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRes
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString([]byte(SecretKey))
+	signedToken, err := token.SignedString([]byte(secretKey))
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +96,7 @@ func (h *Handler) ValidateToken(ctx context.Context, req *pb.ValidateRequest) (*
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(SecretKey), nil
+		return []byte(secretKey), nil
 	})
 	if err != nil {
 		return nil, err
