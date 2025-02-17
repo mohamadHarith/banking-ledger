@@ -35,7 +35,7 @@ func (h *Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.transactionProcessor.Withdraw(r.Context(), &pb.WithdrawRequest{
+	_, err = h.getNextTransactionProcessor().Withdraw(r.Context(), &pb.WithdrawRequest{
 		UserId:      &userId,
 		AccountId:   &i.AccountId,
 		Amount:      &i.Amount,

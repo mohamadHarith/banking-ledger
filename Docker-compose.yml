@@ -1,3 +1,4 @@
+version: '3'
 services:
   api-gateway:
     container_name: api-gateway-container
@@ -48,7 +49,7 @@ services:
     networks:
       - banking_network
   transaction-processor-service:
-    container_name: transaction-processor-container
+    hostname: transaction-processor-container
     build:
       context: .
       dockerfile: ./services/transaction-processor-service/Dockerfile
@@ -61,6 +62,9 @@ services:
       - ENV=dev
     ports:
       - "${TRANSACTION_PROCESSOR_SERVICE_PORT}:${TRANSACTION_PROCESSOR_SERVICE_PORT}"
+    deploy:
+      mode: replicated
+      replicas: 2
     networks:
       - banking_network
   mysql:

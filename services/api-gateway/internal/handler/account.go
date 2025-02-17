@@ -35,7 +35,7 @@ func (h *Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protoResp, err := h.transactionProcessor.CreateAccount(r.Context(), &pb.CreateAccountRequest{
+	protoResp, err := h.getNextTransactionProcessor().CreateAccount(r.Context(), &pb.CreateAccountRequest{
 		UserId:         &userId,
 		InitialBalance: &i.InitialBalance,
 	})

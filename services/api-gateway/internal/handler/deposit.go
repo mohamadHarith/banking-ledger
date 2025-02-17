@@ -35,7 +35,7 @@ func (h *Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.transactionProcessor.Deposit(r.Context(), &pb.DepositRequest{
+	_, err = h.getNextTransactionProcessor().Deposit(r.Context(), &pb.DepositRequest{
 		UserId:      &userId,
 		AccountId:   &i.AccountId,
 		Amount:      &i.Amount,
