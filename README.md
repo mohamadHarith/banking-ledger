@@ -59,7 +59,7 @@ This architecture diagram represents a banking ledger system with multiple micro
 | **authentication-service/**        | Authenticates user                                    | 5002 |
 | **transaction-logger-service/**    | Stores and receives transaction logs (ledger)         | 5003 |
 | **transaction-processor-service-1/** | Processes account creation deposits,and withdrawals | 5004 |
-| **transaction-processor-service-1/** | Processes account creation deposits,and withdrawals | 5004 |
+| **transaction-processor-service-2/** | Processes account creation deposits,and withdrawals | 5005 |
 
 
 ## 📦 Installation & Usage
