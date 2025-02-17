@@ -177,3 +177,69 @@ Sample response:
 }
 ```
 
+-**Transactions:**
+To get transaction logs/ ledger for an account  
+Sample request:  
+```console
+curl --location 'localhost:5001/transactions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk3ODcwODMsImlhdCI6MTczOTc4NjE4Mywic3ViIjoiYTM3YzczYzAtNTI4Mi00OTk1LTgxZDQtYTQ4ODNiMmUzYzU5In0.LL7-1ip2pZ6XtrbDZ3qOC8ELJpEAtyO8Uz8PUAs7YOw' \
+--data '{
+    "accountId":"011af361-298a-4623-8251-9f5072f0becf",
+    "page":1
+}'
+```
+
+Sample response:  
+```
+{
+    "errorCode": 200,
+    "item": [
+        {
+            "id": "e3021802-5149-4c59-905c-8866ecc00921",
+            "accountId": "011af361-298a-4623-8251-9f5072f0becf",
+            "userId": "a37c73c0-5282-4995-81d4-a4883b2e3c59",
+            "amount": 20,
+            "balance": 51,
+            "description": "Savings",
+            "createdAt": "2025-02-17T09:08:59.554Z"
+        },
+        {
+            "id": "e5772b0b-5970-45e2-a4f6-8161ef16352a",
+            "accountId": "011af361-298a-4623-8251-9f5072f0becf",
+            "userId": "a37c73c0-5282-4995-81d4-a4883b2e3c59",
+            "amount": -20,
+            "balance": 31,
+            "description": "Foodpanda",
+            "createdAt": "2025-02-17T09:04:54.481Z"
+        },
+        {
+            "id": "6fef4586-8684-47be-86a7-b5405ad92c9d",
+            "accountId": "011af361-298a-4623-8251-9f5072f0becf",
+            "userId": "a37c73c0-5282-4995-81d4-a4883b2e3c59",
+            "amount": 50,
+            "balance": 51,
+            "description": "Savings",
+            "createdAt": "2025-02-17T09:00:41.733Z"
+        },
+        {
+            "id": "62b48e1f-ea86-45a2-8a89-b9ce9ca9570c",
+            "accountId": "011af361-298a-4623-8251-9f5072f0becf",
+            "userId": "a37c73c0-5282-4995-81d4-a4883b2e3c59",
+            "amount": 1,
+            "balance": 1,
+            "description": "Account Creation Initial Balance",
+            "createdAt": "2025-02-17T08:53:21.389Z"
+        }
+    ],
+    "message": "success",
+    "pagination": {
+        "totalRecords": 4,
+        "currentPage": 1,
+        "totalPages": 1,
+        "nextPage": 0,
+        "prevPage": 0
+    }
+}
+```
+
