@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/dto"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/authentication_service_proto"
 )
 
@@ -86,7 +85,5 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	o.AccessToken = resp.Token
 
-	writeResp(w, "success", http.StatusOK, dto.ResponseMessage{
-		Item: o,
-	}, nil)
+	writeResp(w, "success", http.StatusOK, o, nil)
 }

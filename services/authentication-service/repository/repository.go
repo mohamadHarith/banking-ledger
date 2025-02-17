@@ -22,7 +22,7 @@ func New() *Repository {
 		mysqlHost = "localhost"
 	}
 
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, mysqlHost, cfg.MySql.Database)
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true&parseTime=true", cfg.MySql.User, cfg.MySql.Password, mysqlHost, cfg.MySql.Database)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {

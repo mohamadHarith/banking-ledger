@@ -8,9 +8,10 @@ import (
 
 func (h *Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	var i struct {
-		UserId    string `json:"userId" validate:"required"`
 		AccountId string `json:"accountId" validate:"required"`
 	}
+
+	userId := r.Context().Value(userIdKey).(string)
 
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -30,11 +31,15 @@ func (h *Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	balance, err := h.repository.GetUserBalance(r.Context(), i.UserId, i.AccountId)
+	balance, err := h.repository.GetUserBalance(r.Context(), userId, i.AccountId)
 	if err != nil {
 		writeResp(w, err.Error(), http.StatusBadRequest, nil, nil)
 		return
 	}
 
-	writeResp(w, "success", http.StatusOK, balance, nil)
+	type o struct {
+		Balance uint32 `json:"balance"`
+	}
+
+	writeResp(w, "success", http.StatusOK, o{Balance: balance}, nil)
 }

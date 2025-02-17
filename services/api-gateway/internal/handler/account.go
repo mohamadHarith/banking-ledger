@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/dto"
@@ -11,9 +12,10 @@ import (
 
 func (h *Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var i struct {
-		UserId         string `json:"userId" validate:"required"`
 		InitialBalance uint32 `json:"initialBalance" validate:"required,min=1"`
 	}
+
+	userId := r.Context().Value(userIdKey).(string)
 
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -34,7 +36,7 @@ func (h *Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	protoResp, err := h.transactionProcessor.CreateAccount(r.Context(), &pb.CreateAccountRequest{
-		UserId:         &i.UserId,
+		UserId:         &userId,
 		InitialBalance: &i.InitialBalance,
 	})
 	if err != nil {
@@ -42,7 +44,11 @@ func (h *Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("here")
+
 	account := dto.FromProtoToEntityAccount(protoResp.Account)
+
+	log.Println("here2=> ", account.CreatedAt.Location())
 
 	writeResp(w, "success", http.StatusOK, account, nil)
 }

@@ -28,7 +28,8 @@ func FromEntityToDtoAccount(i *entity.Account) (o Account) {
 	o.Id = i.Id
 	o.UserId = i.UserId
 	o.Balance = i.Balance
-	o.CreatedAt = i.CreatedAt.In(time.Local)
-	o.UpdatedAt = i.UpdatedAt.In(time.Local)
+
+	o.CreatedAt = i.CreatedAt
+	o.UpdatedAt = i.UpdatedAt
 	return
 }

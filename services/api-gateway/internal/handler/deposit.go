@@ -10,11 +10,12 @@ import (
 
 func (h *Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	var i struct {
-		UserId      string `json:"userId" validate:"required"`
 		AccountId   string `json:"accountId" validate:"required"`
 		Amount      uint32 `json:"amount" validate:"required"`
 		Description string `json:"description"`
 	}
+
+	userId := r.Context().Value(userIdKey).(string)
 
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -35,7 +36,7 @@ func (h *Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = h.transactionProcessor.Deposit(r.Context(), &pb.DepositRequest{
-		UserId:      &i.UserId,
+		UserId:      &userId,
 		AccountId:   &i.AccountId,
 		Amount:      &i.Amount,
 		Description: &i.Description,

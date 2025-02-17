@@ -45,12 +45,14 @@ func main() {
 	h := handler.New(repo)
 
 	mux.Handle("/user", http.HandlerFunc(h.CreateUser))
-	mux.Handle("/account", http.HandlerFunc(h.CreateAccount))
 	mux.Handle("/login", http.HandlerFunc(h.Login))
-	mux.Handle("/deposit", http.HandlerFunc(h.Deposit))
-	mux.Handle("/withdraw", http.HandlerFunc(h.Withdraw))
+
+	mux.Handle("/account", h.Authenticate(http.HandlerFunc(h.CreateAccount)))
+	mux.Handle("/deposit", h.Authenticate(http.HandlerFunc(h.Deposit)))
+	mux.Handle("/withdraw", h.Authenticate(http.HandlerFunc(h.Withdraw)))
+	mux.Handle("/balance", h.Authenticate(http.HandlerFunc(h.GetBalance)))
+
 	// mux.Handle("/transfer", nil)
-	mux.Handle("/balance", http.HandlerFunc(h.GetBalance))
 
 	conf := config.GetConf()
 
