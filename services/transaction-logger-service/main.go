@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 
+	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/config"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/handler"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/mq"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/repository"
@@ -39,12 +41,14 @@ func main() {
 	h := handler.New(repo)
 	pb.RegisterTransactionLoggerServiceServer(srv, h)
 
-	lis, err := net.Listen("tcp", "localhost:5004")
+	conf := config.GetConf()
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", conf.ServicePort))
 	if err != nil {
 		panic(err)
 	}
 
-	log.Println("started at port 5004")
+	log.Printf("[%v] started on port [:%v]\n", conf.ServiceName, conf.ServicePort)
 
 	err = srv.Serve(lis)
 	if err != nil {

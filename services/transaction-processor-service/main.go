@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 
+	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/config"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/handler"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/mq"
 	"github.com/mohamadHarith/banking-ledger/services/transaction-processor-service/internal/repository"
@@ -11,34 +13,24 @@ import (
 	"google.golang.org/grpc"
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Panicf("%s: %s", msg, err)
-	}
-}
-
 func main() {
 
-	lis, err := net.Listen("tcp", "localhost:5001")
+	conf := config.GetConf()
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", conf.ServicePort))
 	if err != nil {
 		panic(err)
 	}
 
 	repo := repository.New()
 	mq := mq.New()
-	// mq.PublishAccountBalance(123)
-	// time.Sleep(time.Second * 2)
-	// mq.PublishAccountBalance(124)
-	// time.Sleep(time.Second * 2)
-
-	// mq.PublishAccountBalance(125)
 
 	h := handler.New(repo, mq)
 
 	srv := grpc.NewServer()
 	pb.RegisterTransactionProcessorServiceServer(srv, h)
 
-	log.Println("transaction-processor-service started on port 5001")
+	log.Printf("[%v] started on port [:%v]\n", conf.ServiceName, conf.ServicePort)
 
 	if err := srv.Serve(lis); err != nil {
 		panic(err)

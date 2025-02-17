@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/config"
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/handler"
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/mq"
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/repository"
@@ -42,13 +44,17 @@ func main() {
 
 	h := handler.New(repo)
 
+	mux.Handle("/user", http.HandlerFunc(h.CreateUser))
 	mux.Handle("/account", http.HandlerFunc(h.CreateAccount))
-	// // mux.Handle("/login", nil)
+	mux.Handle("/login", http.HandlerFunc(h.Login))
 	mux.Handle("/deposit", http.HandlerFunc(h.Deposit))
 	mux.Handle("/withdraw", http.HandlerFunc(h.Withdraw))
 	// mux.Handle("/transfer", nil)
 	mux.Handle("/balance", http.HandlerFunc(h.GetBalance))
 
-	log.Println("[api-gateway] started on port [:5002]")
-	http.ListenAndServe(":5002", mux)
+	conf := config.GetConf()
+
+	log.Printf("[%v] started on port [:%v]\n", conf.ServiceName, conf.ServicePort)
+
+	http.ListenAndServe(fmt.Sprintf(":%v", conf.ServicePort), mux)
 }

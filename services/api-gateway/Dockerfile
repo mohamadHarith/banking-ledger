@@ -25,7 +25,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o main ./services/transaction-logger-service
+RUN go build -o main ./services/api-gateway
 
 # Final Stage
 FROM alpine:latest

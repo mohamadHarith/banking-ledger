@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"log"
+	"fmt"
 
 	"github.com/mohamadHarith/banking-ledger/services/transaction-logger-service/internal/config"
 	"github.com/mohamadHarith/banking-ledger/shared/entity"
@@ -19,12 +19,7 @@ type Repository struct {
 func New() *Repository {
 	conf := config.GetConf()
 
-	log.Println(conf.MongoDB.User)
-	log.Println(conf.MongoDB.Password)
-
-	// uri := fmt.Sprintf("mongodb://%v:%v@localhost:27017/?authSource=banking&authMechanism=SCRAM-SHA-256", conf.MongoDB.User, conf.MongoDB.Password)
-
-	uri := "mongodb://user:password@localhost:27017/?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=banking&authMechanism=SCRAM-SHA-256"
+	uri := fmt.Sprintf("mongodb://%v:%v@%v:27017/?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=%v&authMechanism=SCRAM-SHA-256", conf.MongoDB.User, conf.MongoDB.Password, conf.MongoDB.ServiceName, conf.MongoDB.Database)
 
 	mgo, err := mongo.Connect(options.Client().ApplyURI(uri))
 	if err != nil {

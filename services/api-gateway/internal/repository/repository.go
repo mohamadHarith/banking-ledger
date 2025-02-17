@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/config"
 	"github.com/redis/go-redis/v9"
@@ -15,7 +16,7 @@ func New() *Repository {
 	conf := config.GetConf()
 
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     fmt.Sprintf("%v:6379", conf.Redis.ServiceName),
 		Password: conf.Redis.Password,
 		DB:       0,
 	})

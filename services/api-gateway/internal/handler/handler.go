@@ -6,36 +6,48 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/config"
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/dto"
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/repository"
+	pb2 "github.com/mohamadHarith/banking-ledger/shared/proto/authentication_service_proto"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/transaction_processor_proto"
 	"google.golang.org/grpc"
 )
 
 type Handler struct {
 	transactionProcessor pb.TransactionProcessorServiceClient
+	authenticator        pb2.AuthServiceClient
 	validator            func(s interface{}) error
 	repository           *repository.Repository
 }
 
 func New(r *repository.Repository) *Handler {
 
-	conn, err := grpc.NewClient("localhost:5001", grpc.WithInsecure(), grpc.WithBlock())
+	conf := config.GetConf()
+
+	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", conf.TransactionProcessorService.ServiceName, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		panic(err)
 	}
 
 	client := pb.NewTransactionProcessorServiceClient(conn)
 
+	conn2, err := grpc.NewClient(fmt.Sprintf("%v:%v", conf.AuthenticationService.ServiceName, conf.AuthenticationService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		panic(err)
+	}
+
+	client2 := pb2.NewAuthServiceClient(conn2)
+
 	return &Handler{
 		transactionProcessor: client,
 		validator:            validator.New(validator.WithRequiredStructEnabled()).Struct,
 		repository:           r,
+		authenticator:        client2,
 	}
-
 }
 
-func writeResp(w http.ResponseWriter, message string, statusCode int32, item any, items any) {
+func writeResp(w http.ResponseWriter, message string, statusCode int32, item any, items []any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(int(statusCode))
 	msg := dto.ResponseMessage{

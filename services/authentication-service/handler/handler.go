@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/mohamadHarith/banking-ledger/services/authentication_service/repository"
+	"github.com/mohamadHarith/banking-ledger/services/authentication-service/repository"
 	"github.com/mohamadHarith/banking-ledger/shared/entity"
 	pb "github.com/mohamadHarith/banking-ledger/shared/proto/authentication_service_proto"
 	"golang.org/x/crypto/bcrypt"

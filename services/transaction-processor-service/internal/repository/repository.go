@@ -15,7 +15,7 @@ type Repository struct {
 func New() *Repository {
 	cfg := config.GetConf()
 
-	dsn := fmt.Sprintf("%v:%v@tcp(localhost:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, cfg.MySql.Database)
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, cfg.MySql.ServiceName, cfg.MySql.Database)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {

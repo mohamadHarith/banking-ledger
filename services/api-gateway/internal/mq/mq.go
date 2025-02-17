@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/mohamadHarith/banking-ledger/services/api-gateway/internal/config"
 	"github.com/mohamadHarith/banking-ledger/shared/entity"
@@ -19,7 +20,9 @@ type MQ struct {
 func New() *MQ {
 	conf := config.GetConf()
 
-	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@localhost:5672/", conf.RabbitMQ.User, conf.RabbitMQ.Password))
+	log.Println("conf=> ", conf)
+
+	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@%v:5672/", conf.RabbitMQ.User, conf.RabbitMQ.Password, conf.RabbitMQ.ServiceName))
 	if err != nil {
 		panic(err)
 	}

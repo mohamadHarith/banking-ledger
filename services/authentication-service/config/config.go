@@ -2,10 +2,10 @@ package config
 
 import (
 	"github.com/caarlos0/env/v11"
-	"github.com/joho/godotenv"
 )
 
 type MySql struct {
+	ServiceName  string `env:"MYSQL_SERVICE_NAME"`
 	User         string `env:"MYSQL_USER"`
 	Password     string `env:"MYSQL_PASSWORD"`
 	Database     string `env:"MYSQL_DATABASE"`
@@ -13,6 +13,8 @@ type MySql struct {
 }
 
 type configs struct {
+	ServiceName string `env:"AUTHENTICATION_SERVICE_NAME"`
+	ServicePort string `env:"AUTHENTICATION_SERVICE_PORT"`
 	MySql
 }
 
@@ -23,10 +25,10 @@ func GetConf() configs {
 }
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	if err := env.Parse(&conf); err != nil {
 		panic(err)
