@@ -19,7 +19,8 @@ A backend service built as part of an assessment for Goland Developer position a
 - **Docker Compose** for container orchestration
 
 ## 🏗️ Architecture Overview
-![Bank System drawio](https://github.com/user-attachments/assets/fafb563c-8459-441c-8104-bc9ff9d46b54)
+![Bank System-Page-2 drawio (1)](https://github.com/user-attachments/assets/4f573e42-894f-4a37-a1f3-723d14449b7c)
+
 
 ## 🧩 Service Explanations (`services/`):
 | Service Name                       | Description                                         | Port |
