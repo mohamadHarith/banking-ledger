@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -30,7 +31,13 @@ func main() {
 
 	h := handler.New(repo, mq)
 
-	srv := grpc.NewServer()
+	opt := grpc.UnaryInterceptor(func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+		log.Printf("Received request - Method: %s - Request: %+v", info.FullMethod, req)
+
+		return handler(ctx, req)
+	})
+
+	srv := grpc.NewServer(opt)
 	pb.RegisterTransactionProcessorServiceServer(srv, h)
 
 	log.Printf("[%v] started on port [:%v]\n", conf.ServiceName, conf.ServicePort)
