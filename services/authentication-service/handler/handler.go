@@ -31,7 +31,7 @@ func New(repo *repository.Repository) *Handler {
 func (h *Handler) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*emptypb.Empty, error) {
 	u := entity.User{}
 	u.Id = uuid.NewString()
-	u.FullName = req.Username
+	u.FullName = req.FullName
 	u.Username = req.Username
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)

@@ -17,7 +17,12 @@ type Repository struct {
 func New() *Repository {
 	cfg := config.GetConf()
 
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, cfg.MySql.ServiceName, cfg.MySql.Database)
+	mysqlHost := cfg.MySql.ServiceName
+	if cfg.IsLocalEnvironment() {
+		mysqlHost = "localhost"
+	}
+
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?multiStatements=true", cfg.MySql.User, cfg.MySql.Password, mysqlHost, cfg.MySql.Database)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
@@ -52,9 +57,9 @@ func (r *Repository) migrateTables() error {
 
 func (r *Repository) CreateUser(ctx context.Context, u entity.User) error {
 
-	query := `INSERT INTO users (id, full_name, user_name, password, created_at, updated_at) VALUE (?,?,?,?,?,?)`
+	query := `INSERT INTO users (id, full_name, user_name, password, created_at, updated_at) VALUES (?,?,?,?,?,?)`
 
-	_, err := r.db.ExecContext(ctx, query)
+	_, err := r.db.ExecContext(ctx, query, u.Id, u.FullName, u.Username, u.Password, u.CreatedAt, u.UpdatedAt)
 	if err != nil {
 		return err
 	}
@@ -64,9 +69,9 @@ func (r *Repository) CreateUser(ctx context.Context, u entity.User) error {
 
 func (r *Repository) GetUser(ctx context.Context, id string) (u entity.User, err error) {
 
-	query := `SELECT * FROM users where id = ?`
+	query := `SELECT * FROM users where user_name = ?`
 
-	row := r.db.QueryRowContext(ctx, query)
+	row := r.db.QueryRowContext(ctx, query, id)
 
 	err = row.Scan(&u.Id, &u.FullName, &u.Username, &u.Password, &u.CreatedAt, &u.UpdatedAt)
 	if err != nil {

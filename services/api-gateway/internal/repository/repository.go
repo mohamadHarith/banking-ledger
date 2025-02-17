@@ -15,8 +15,13 @@ type Repository struct {
 func New() *Repository {
 	conf := config.GetConf()
 
+	redisHost := conf.Redis.ServiceName
+	if conf.IsLocalEnvironment() {
+		redisHost = "localhost"
+	}
+
 	client := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%v:6379", conf.Redis.ServiceName),
+		Addr:     fmt.Sprintf("%v:6379", redisHost),
 		Password: conf.Redis.Password,
 		DB:       0,
 	})

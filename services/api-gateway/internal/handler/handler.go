@@ -25,14 +25,24 @@ func New(r *repository.Repository) *Handler {
 
 	conf := config.GetConf()
 
-	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", conf.TransactionProcessorService.ServiceName, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+	transactionProcessorHost := conf.TransactionProcessorService.ServiceName
+	if conf.IsLocalEnvironment() {
+		transactionProcessorHost = "localhost"
+	}
+
+	conn, err := grpc.NewClient(fmt.Sprintf("%v:%v", transactionProcessorHost, conf.TransactionProcessorService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		panic(err)
 	}
 
 	client := pb.NewTransactionProcessorServiceClient(conn)
 
-	conn2, err := grpc.NewClient(fmt.Sprintf("%v:%v", conf.AuthenticationService.ServiceName, conf.AuthenticationService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
+	authenticationServiceHost := conf.AuthenticationService.ServiceName
+	if conf.IsLocalEnvironment() {
+		authenticationServiceHost = "localhost"
+	}
+
+	conn2, err := grpc.NewClient(fmt.Sprintf("%v:%v", authenticationServiceHost, conf.AuthenticationService.ServicePort), grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		panic(err)
 	}

@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/caarlos0/env/v11"
+	"github.com/joho/godotenv"
 )
 
 type RabbitMQ struct {
@@ -38,6 +39,15 @@ type configs struct {
 	TransactionProcessorService
 	ServiceName string `env:"API_GATEWAY_SERVICE_NAME"`
 	ServicePort string `env:"API_GATEWAY_PORT"`
+	Env         string `env:"ENV" envDefault:"local"`
+}
+
+func (conf configs) IsLocalEnvironment() bool {
+	return conf.Env == "local"
+}
+
+func (conf configs) IsDevelopmentEnvironment() bool {
+	return conf.Env == "dev"
 }
 
 var conf configs
@@ -47,10 +57,10 @@ func GetConf() configs {
 }
 
 func init() {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err := godotenv.Load("../../.env")
+	if err != nil {
+		panic(err)
+	}
 
 	if err := env.Parse(&conf); err != nil {
 		panic(err)

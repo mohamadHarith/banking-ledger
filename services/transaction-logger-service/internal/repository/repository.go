@@ -19,7 +19,12 @@ type Repository struct {
 func New() *Repository {
 	conf := config.GetConf()
 
-	uri := fmt.Sprintf("mongodb://%v:%v@%v:27017/?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=%v&authMechanism=SCRAM-SHA-256", conf.MongoDB.User, conf.MongoDB.Password, conf.MongoDB.ServiceName, conf.MongoDB.Database)
+	mongodbHost := conf.MongoDB.ServiceName
+	if conf.IsLocalEnvironment() {
+		mongodbHost = "localhost"
+	}
+
+	uri := fmt.Sprintf("mongodb://%v:%v@%v:27017/?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=%v&authMechanism=SCRAM-SHA-256", conf.MongoDB.User, conf.MongoDB.Password, mongodbHost, conf.MongoDB.Database)
 
 	mgo, err := mongo.Connect(options.Client().ApplyURI(uri))
 	if err != nil {

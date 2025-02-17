@@ -19,7 +19,12 @@ type MQ struct {
 func New() *MQ {
 	conf := config.GetConf()
 
-	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@%v:5672/", conf.RabbitMQ.User, conf.RabbitMQ.Password, conf.RabbitMQ.ServiceName))
+	mqHost := conf.RabbitMQ.ServiceName
+	if conf.IsLocalEnvironment() {
+		mqHost = "localhost"
+	}
+
+	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@%v:5672/", conf.RabbitMQ.User, conf.RabbitMQ.Password, mqHost))
 	if err != nil {
 		panic(err)
 	}
