@@ -22,10 +22,13 @@ A backend service built as part of an assessment for Goland Developer position a
 ![Bank System drawio](https://github.com/user-attachments/assets/fafb563c-8459-441c-8104-bc9ff9d46b54)
 
 ## 🧩 Service Explanations (`services/`):
-- **api-gateway/**: Manages API endpoints and routes requests to the appropriate services.
-- **accounts/**: Handles account creation, balance updates, and account management.
-- **transactions/**: Processes deposits, withdrawals, and records transaction history.
-- **shared/**: Contains shared utilities, configurations, and common modules.
+| Service Name                       | Description                                         | Port |
+|------------------------------------|-----------------------------------------------------|------|
+| **api-gateway/**                   | Manages API endpoints and routes requests           | 5001 |
+| **authentication-service/**        | Auhtenticates user                                  | 5002 |
+| **transaction-logger-service/**    | Stores and receives transaction logs (ledger)       | 5003 |
+| **transaction-processor-service/** | Processes account creation deposits,and withdrawals | 5004 |
+
 
 ## 📦 Installation & Usage
 ### Prerequisites
@@ -36,44 +39,141 @@ A backend service built as part of an assessment for Goland Developer position a
 docker-compose up --build
 ```
 
-### REST API Documentation (`services/api-gateway`)
-- **Create Account:** `POST /accounts`
-  Request: `{ "name": "John Doe", "initial_balance": 1000 }`
-  Response: `{ "account_id": "12345" }`
-
-- **Deposit Funds:** `POST /transactions/deposit`
-  Request: `{ "account_id": "12345", "amount": 500 }`
-  Response: `{ "balance": 1500 }`
-
-- **Withdraw Funds:** `POST /transactions/withdraw`
-  Request: `{ "account_id": "12345", "amount": 200 }`
-  Response: `{ "balance": 1300 }`
-
-- **Transaction History:** `GET /transactions/{account_id}`
-  Response: `[{"type": "deposit", "amount": 500}, {"type": "withdraw", "amount": 200}]`
-
-## 🧪 Testing
-```bash
-go test ./...
+### REST APIs
+- **Create User:**
+To create user account
+Sample request:
+```console
+curl --location 'localhost:5001/user' \
+--header 'Content-Type: application/json' \
+--data '{
+    "fullName":"Mohamad Harith Bin Habib Rahman",
+    "userName":"harith97",
+    "password":"123456$"
+}'
+```
+Sample response:
+```json
+{
+    "errorCode": 200,
+    "message": "success"
+}
 ```
 
-## 📂 Project Structure
-```
-├── docker-compose.yml
-├── services/
-│   ├── api-gateway/    (API routes and request handling)
-│   ├── accounts/       (Account management logic)
-│   ├── transactions/   (Transaction processing and logging)
-├── shared/             (Common utilities and configurations)
-└── README.md
+- **Login:**
+To login and obtain access token
+Sample request:
+```console
+curl --location 'localhost:5001/login' \
+--header 'Content-Type: application/json' \
+--data '{
+    "userName":"harith97",
+    "password":"123456$"
+}'
 ```
 
-## ✅ Improvements
-- Add rate limiting to prevent abuse
-- Implement retry mechanisms in the queue
-- Secure endpoints with authentication tokens
+Sample response:
+```json
+{
+    "errorCode": 200,
+    "item": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk3ODAxODUsImlhdCI6MTczOTc4MDE3MCwic3ViIjoiYTM3YzczYzAtNTI4Mi00OTk1LTgxZDQtYTQ4ODNiMmUzYzU5In0.kqJDTMluX3-cBXGnVs4Vc83rRnxFd1HBU7vCBJ7HDIs"
+    },
+    "message": "success"
+}
+```
 
-## 📝 Best Practices Followed
-- **SOLID Principles:** Proper separation of concerns and dependency injection.
-- **DRY and KISS:** Simple, reusable functions with minimal redundancy.
-- **Clean Architecture:** Clear separation of business logic and framework dependencies.
+-**Account:**
+To create ledger account with initial balance  
+Sample request:
+```console
+curl --location 'localhost:5001/account' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk3ODI5NjYsImlhdCI6MTczOTc4MjA2Niwic3ViIjoiYTM3YzczYzAtNTI4Mi00OTk1LTgxZDQtYTQ4ODNiMmUzYzU5In0.NxOKLY7_Ox_IQxxAUKcauhKiK2bCxLfASdFtJbWG5tg' \
+--data '{
+    "initialBalance":100
+}'
+```
+
+Sample response:
+```json
+{
+    "errorCode": 200,
+    "item": {
+        "Id": "011af361-298a-4623-8251-9f5072f0becf",
+        "UserId": "a37c73c0-5282-4995-81d4-a4883b2e3c59",
+        "Balance": 100,
+        "CreatedAt": "2025-02-17T08:53:21.389983Z",
+        "UpdatedAt": "2025-02-17T08:53:21.389983Z"
+    },
+    "message": "success"
+}
+```
+
+-**Deposit:**
+To deposit funds to an account  
+Sample request:
+```console
+curl --location 'localhost:5001/deposit' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk3ODM3MjAsImlhdCI6MTczOTc4MjgyMCwic3ViIjoiYTM3YzczYzAtNTI4Mi00OTk1LTgxZDQtYTQ4ODNiMmUzYzU5In0.P0lKKQdFn9KlpD68r8_6ofQyIkXajrHiDudSnTXiBZ8' \
+--data '{
+    "accountId":"011af361-298a-4623-8251-9f5072f0becf",
+    "amount":50,
+    "description":"Savings"
+}'
+```
+
+Sample response:
+```
+{
+    "errorCode": 200,
+    "message": "success"
+}
+```
+
+-**Withdraw:**
+To withdraw funds from an account  
+Sample request:
+```console
+curl --location 'localhost:5001/withdraw' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk3ODM3MjAsImlhdCI6MTczOTc4MjgyMCwic3ViIjoiYTM3YzczYzAtNTI4Mi00OTk1LTgxZDQtYTQ4ODNiMmUzYzU5In0.P0lKKQdFn9KlpD68r8_6ofQyIkXajrHiDudSnTXiBZ8' \
+--data '{
+    "accountId":"011af361-298a-4623-8251-9f5072f0becf",
+    "amount":20,
+    "description":"Foodpanda"
+}'
+```
+
+Sample response:
+```json
+{
+    "errorCode": 200,
+    "message": "success"
+}
+```
+
+-**Balance:**
+To get balance for an account  
+Sample request:
+```console
+curl --location --request GET 'localhost:5001/balance' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzk3ODM3MjAsImlhdCI6MTczOTc4MjgyMCwic3ViIjoiYTM3YzczYzAtNTI4Mi00OTk1LTgxZDQtYTQ4ODNiMmUzYzU5In0.P0lKKQdFn9KlpD68r8_6ofQyIkXajrHiDudSnTXiBZ8' \
+--data '{
+    "accountId":"011af361-298a-4623-8251-9f5072f0becf"
+}'
+```
+
+Sample response:
+```json
+{
+    "errorCode": 200,
+    "item": {
+        "balance": 51
+    },
+    "message": "success"
+}
+```
+
