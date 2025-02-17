@@ -1,60 +1,68 @@
 services:
-  # api-gateway:
-  #   container_name: api-gateway-container
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/api-gateway/Dockerfile
-  #     args:
-  #       PORT: ${API_GATEWAY_PORT}
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
-  #   networks:
-  #     - banking_network
-  # authentication-service:
-  #   container_name: authentication-service-container
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/authentication-service/Dockerfile
-  #     args:
-  #       PORT: ${AUTHENTICATION_SERVICE_PORT}
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "${AUTHENTICATION_SERVICE_PORT}:${AUTHENTICATION_SERVICE_PORT}"
-  #   networks:
-  #     - banking_network
-  # transaction-logger-service:
-  #   container_name: transaction-logger-container
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/transaction-logger-service/Dockerfile
-  #     args:
-  #       PORT: ${TRANSACTION_LOGGER_SERVICE_PORT}
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "${TRANSACTION_LOGGER_SERVICE_PORT}:${TRANSACTION_LOGGER_SERVICE_PORT}"
-  #   networks:
-  #     - banking_network
-  # transaction-processor-service:
-  #   container_name: transaction-processor-container
-  #   build:
-  #     context: .
-  #     dockerfile: ./services/transaction-processor-service/Dockerfile
-  #     args:
-  #       PORT: ${TRANSACTION_PROCESSOR_SERVICE_PORT}
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "${TRANSACTION_PROCESSOR_SERVICE_PORT}:${TRANSACTION_PROCESSOR_SERVICE_PORT}"
-  #   networks:
-  #     - banking_network
+  api-gateway:
+    container_name: api-gateway-container
+    build:
+      context: .
+      dockerfile: ./services/api-gateway/Dockerfile
+      args:
+        PORT: ${API_GATEWAY_PORT}
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ENV=dev
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    networks:
+      - banking_network
+  authentication-service:
+    container_name: authentication-service-container
+    build:
+      context: .
+      dockerfile: ./services/authentication-service/Dockerfile
+      args:
+        PORT: ${AUTHENTICATION_SERVICE_PORT}
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ENV=dev
+    ports:
+      - "${AUTHENTICATION_SERVICE_PORT}:${AUTHENTICATION_SERVICE_PORT}"
+    networks:
+      - banking_network
+  transaction-logger-service:
+    container_name: transaction-logger-container
+    build:
+      context: .
+      dockerfile: ./services/transaction-logger-service/Dockerfile
+      args:
+        PORT: ${TRANSACTION_LOGGER_SERVICE_PORT}
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ENV=dev
+    ports:
+      - "${TRANSACTION_LOGGER_SERVICE_PORT}:${TRANSACTION_LOGGER_SERVICE_PORT}"
+    networks:
+      - banking_network
+  transaction-processor-service:
+    container_name: transaction-processor-container
+    build:
+      context: .
+      dockerfile: ./services/transaction-processor-service/Dockerfile
+      args:
+        PORT: ${TRANSACTION_PROCESSOR_SERVICE_PORT}
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ENV=dev
+    ports:
+      - "${TRANSACTION_PROCESSOR_SERVICE_PORT}:${TRANSACTION_PROCESSOR_SERVICE_PORT}"
+    networks:
+      - banking_network
   mysql:
     image: mysql:8.0
     container_name: mysql_container

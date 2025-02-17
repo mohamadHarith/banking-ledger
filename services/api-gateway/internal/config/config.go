@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+
 	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
 )
@@ -57,9 +59,11 @@ func GetConf() configs {
 }
 
 func init() {
-	err := godotenv.Load("../../.env")
-	if err != nil {
-		panic(err)
+	if os.Getenv("ENV") != "dev" {
+		err := godotenv.Load("../../.env")
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	if err := env.Parse(&conf); err != nil {
