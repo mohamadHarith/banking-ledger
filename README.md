@@ -7,9 +7,11 @@ A backend service built as part of an assessment for Goland Developer position a
 ## 🛠️ Features
 - Create accounts with initial balances
 - Deposit and withdraw funds
-- View transaction history
+- Retrieval of detailed transaction logs/ ledger
 - Reliable and scalable transactions logging using message queues
 - ACID compliance for financial operations
+- Horizontally scalled service
+- Secured APIs using JWT authentication
 
 ## 🧱 Technology Stack
 - **Golang** for backend services
@@ -245,4 +247,15 @@ Sample response:
     }
 }
 ```
+
+## ✅ Improvements
+- Add rate limiting to prevent abuse
+- Add distributed tracing and logging
+- Add more robust tests
+
+## 🏁 Conclusion
+This project successfully meets the requirements of the assessment by showcasing:
+- **Technical Proficiency:** Use of Golang, MySQL, MongoDB, RabbitMQ, and Docker.
+- **Scalability and Reliability:** Through message queues and microservice architecture.
+- **Code Quality:** Adherence to best practices and clean architecture principles.
 
